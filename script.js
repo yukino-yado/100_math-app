@@ -23,10 +23,13 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-/* Firebase Consoleからコピーした設定に置き換え */
+/*
+  Firebase Consoleからコピーした設定に置き換えてください。
+*/
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyA1DwKuag7tuKC75aGWYq4AszDSJHONdy0",
-  authDomain: "math-app-89b47.firebaseapp.com", 
+  authDomain: "math-app-89b47.firebaseapp.com",
   projectId: "math-app-89b47",
   storageBucket: "math-app-89b47.firebasestorage.app",
   messagingSenderId: "908293875104",
@@ -308,8 +311,6 @@ function initializeAuth() {
   });
 }
 
-/* 初回登録 */
-
 registerBtn.addEventListener("click", async () => {
   const name = playerNameInput.value.trim();
   const grade = gradeSelect.value;
@@ -370,8 +371,6 @@ registerBtn.addEventListener("click", async () => {
     registerBtn.disabled = false;
   }
 });
-
-/* プロフィール */
 
 async function fetchProfile() {
   if (!currentUser) return null;
@@ -489,8 +488,6 @@ function applyProfileToScreen() {
   applyTheme(theme);
 }
 
-/* ホーム選択・難易度ポップアップ */
-
 function resetHomeSelection() {
   selectedOperation = null;
   selectedDifficulty = null;
@@ -550,8 +547,6 @@ function closeDifficultyModal() {
   }, 260);
 }
 
-/* ランキング選択 */
-
 function resetRankingSelects() {
   currentRankingOperation = "add";
   currentRankingDifficulty = "easy";
@@ -569,8 +564,6 @@ applyRankingFilterBtn.addEventListener("click", async () => {
 
   await renderWeeklyRanking();
 });
-
-/* プロフィール編集 */
 
 function openProfileEditScreen() {
   if (!currentProfile) return;
@@ -804,8 +797,6 @@ saveProfileBtn.addEventListener("click", async () => {
   }
 });
 
-/* 入力チェック */
-
 function isValidPlayerName(name) {
   return name.length >= 1 && name.length <= 12;
 }
@@ -851,8 +842,6 @@ function containsBlockedWord(text) {
     return normalized.includes(normalizeForFilter(word));
   });
 }
-
-/* イベント */
 
 finishBtn.addEventListener("click", finishGame);
 
@@ -937,6 +926,16 @@ document.addEventListener("keydown", event => {
     moveToNextCell();
   }
 });
+
+document.addEventListener(
+  "dblclick",
+  event => {
+    if (isScreenActive("game")) {
+      event.preventDefault();
+    }
+  },
+  { passive: false }
+);
 
 menuBtn.addEventListener("click", openMenu);
 closeMenuBtn.addEventListener("click", closeMenu);
@@ -1044,35 +1043,43 @@ logoutBtn.addEventListener("click", async () => {
   }
 });
 
-/* ゲーム */
-
 async function startGame(operation, difficulty) {
-  resetState();
+  try {
+    resetState();
 
-  state.operation = operation;
-  state.difficulty = difficulty;
-  state.symbol = OPERATION_SYMBOLS[operation];
+    state.operation = operation;
+    state.difficulty = difficulty;
+    state.symbol = OPERATION_SYMBOLS[operation];
 
-  generateHeaders(operation, difficulty);
-  generateCorrectAnswers();
+    generateHeaders(operation, difficulty);
+    generateCorrectAnswers();
 
-  operationLabel.textContent = OPERATION_NAMES[operation];
-  difficultyLabel.textContent = DIFFICULTIES[difficulty];
-  timerDisplay.textContent = "00:00";
+    operationLabel.textContent = OPERATION_NAMES[operation];
+    difficultyLabel.textContent = DIFFICULTIES[difficulty];
+    timerDisplay.textContent = "00:00";
 
-  renderGameBoard();
-  switchScreen("game");
+    renderGameBoard();
+    switchScreen("game");
 
-  finishBtn.disabled = true;
-  state.isCountingDown = true;
+    finishBtn.disabled = true;
+    state.isCountingDown = true;
 
-  await runCountdown();
+    await runCountdown();
 
-  state.isCountingDown = false;
-  finishBtn.disabled = false;
+    state.isCountingDown = false;
+    finishBtn.disabled = false;
 
-  state.startTime = Date.now();
-  state.timerInterval = setInterval(updateTimer, 200);
+    state.startTime = Date.now();
+    state.timerInterval = setInterval(updateTimer, 200);
+  } catch (error) {
+    console.error(error);
+    alert("問題の作成に失敗しました。\n" + error.message);
+
+    state.isCountingDown = false;
+    finishBtn.disabled = false;
+
+    switchScreen("home");
+  }
 }
 
 function resetState() {
@@ -1120,8 +1127,6 @@ async function runCountdown() {
   countdownOverlay.classList.add("hidden");
 }
 
-/* 問題生成 */
-
 function generateHeaders(operation, difficulty) {
   if (operation === "add") generateAddHeaders(difficulty);
   if (operation === "sub") generateSubHeaders(difficulty);
@@ -1142,10 +1147,7 @@ function generateAddHeaders(difficulty) {
 
   if (difficulty === "hard") {
     state.rowNumbers = generateUniqueRandomNumbers(10, 100, 999);
-    state.colNumbers = generateUniqueRandomNumbersMixed(10, [
-      [10, 99],
-      [100, 999]
-    ], new Set(state.rowNumbers));
+    state.colNumbers = generateUniqueRandomNumbersMixed(10, [[10, 99], [100, 999]], new Set(state.rowNumbers));
   }
 }
 
@@ -1169,10 +1171,7 @@ function generateSubHeaders(difficulty) {
 
   if (difficulty === "hard") {
     state.rowNumbers = generateUniqueRandomNumbers(10, 100, 999);
-    state.colNumbers = generateUniqueRandomNumbersMixed(10, [
-      [10, 99],
-      [100, 999]
-    ], new Set(state.rowNumbers));
+    state.colNumbers = generateUniqueRandomNumbersMixed(10, [[10, 99], [100, 999]], new Set(state.rowNumbers));
   }
 
   if (!allowNegative && difficulty !== "easy") {
@@ -1204,49 +1203,50 @@ function generateMulHeaders(difficulty) {
 
 function generateDivHeaders(difficulty) {
   if (difficulty === "easy") {
-    generateDivisionHeaders({
-      rowMin: 10,
-      rowMax: 99,
-      allowedDivisors: [1, 2, 3, 4, 6]
+    state.colNumbers = [1, 2, 3, 6, 1, 2, 3, 6, 1, 2];
+    state.rowNumbers = generateDivisionRows({
+      min: 12,
+      max: 96,
+      base: 6
     });
   }
 
   if (difficulty === "normal") {
-    generateDivisionHeaders({
-      rowMin: 100,
-      rowMax: 999,
-      allowedDivisors: [1, 2, 3, 4, 5, 6, 8, 9]
+    state.colNumbers = [1, 2, 3, 4, 6, 8, 1, 2, 3, 4];
+    state.rowNumbers = generateDivisionRows({
+      min: 120,
+      max: 984,
+      base: 24,
+      evenOnesPlace: true
     });
   }
 
   if (difficulty === "hard") {
-    generateDivisionHeaders({
-      rowMin: 100,
-      rowMax: 999,
-      allowedDivisors: [2, 3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30]
+    state.colNumbers = [2, 3, 4, 5, 6, 10, 12, 2, 3, 4];
+    state.rowNumbers = generateDivisionRows({
+      min: 120,
+      max: 960,
+      base: 60,
+      evenOnesPlace: true
     });
   }
 }
 
-function generateDivisionHeaders({ rowMin, rowMax, allowedDivisors }) {
-  const base = lcmArray(allowedDivisors);
-  const rowCandidates = [];
+function generateDivisionRows({ min, max, base, evenOnesPlace = false }) {
+  const candidates = [];
 
-  for (let n = rowMin; n <= rowMax; n++) {
-    if (n % base === 0) {
-      rowCandidates.push(n);
-    }
+  for (let n = min; n <= max; n++) {
+    if (n % base !== 0) continue;
+    if (evenOnesPlace && n % 2 !== 0) continue;
+
+    candidates.push(n);
   }
 
-  if (rowCandidates.length < GRID_SIZE) {
-    throw new Error("割り算の問題生成に失敗しました");
+  if (candidates.length < GRID_SIZE) {
+    throw new Error("割り算の数字生成に失敗しました");
   }
 
-  state.rowNumbers = shuffleArray(rowCandidates).slice(0, GRID_SIZE);
-
-  state.colNumbers = Array.from({ length: GRID_SIZE }, () => {
-    return allowedDivisors[randomInt(0, allowedDivisors.length - 1)];
-  });
+  return shuffleArray(candidates).slice(0, GRID_SIZE);
 }
 
 function generateCorrectAnswers() {
@@ -1319,8 +1319,6 @@ function renderGameBoard() {
     gameBoard.appendChild(tr);
   }
 }
-
-/* 入力 */
 
 function addDigit(digit) {
   const { row, col } = state.selectedCell;
@@ -1395,8 +1393,6 @@ function updateTimer() {
   timerDisplay.textContent = formatTime(elapsed);
 }
 
-/* 終了・採点 */
-
 async function finishGame() {
   if (state.isCountingDown) return;
 
@@ -1414,9 +1410,7 @@ async function finishGame() {
       const userAnswer = Number(userAnswerText);
       const correctAnswer = state.correctAnswers[r][c];
 
-      if (userAnswerText !== "") {
-        answeredCount++;
-      }
+      if (userAnswerText !== "") answeredCount++;
 
       if (userAnswerText !== "" && userAnswer === correctAnswer) {
         correct++;
@@ -1451,9 +1445,7 @@ async function finishGame() {
 
   const oldPlayCount = currentProfile.playCount || 0;
   const newPlayCount = isCompletedAllCells ? oldPlayCount + 1 : oldPlayCount;
-  const unlockMessages = isCompletedAllCells
-    ? getUnlockMessages(oldPlayCount, newPlayCount)
-    : [];
+  const unlockMessages = isCompletedAllCells ? getUnlockMessages(oldPlayCount, newPlayCount) : [];
 
   renderUnlockMessages(unlockMessages);
 
@@ -1625,17 +1617,10 @@ async function isPersonalBest(operation, difficulty, finalTime) {
   return finalTime < bestTime;
 }
 
-/* ランキング */
-
 async function renderWeeklyRanking() {
   const list = document.getElementById("weeklyRankingList");
 
-  list.innerHTML = `
-    <li>
-      <span class="rank-name">読み込み中...</span>
-      <span class="rank-time">--:--</span>
-    </li>
-  `;
+  list.innerHTML = `<li><span class="rank-name">読み込み中...</span><span class="rank-time">--:--</span></li>`;
 
   try {
     const weekId = getWeekId();
@@ -1664,10 +1649,7 @@ async function renderWeeklyRanking() {
 
     if (snapshot.empty) {
       const li = document.createElement("li");
-      li.innerHTML = `
-        <span class="rank-name">まだ記録がありません</span>
-        <span class="rank-time">--:--</span>
-      `;
+      li.innerHTML = `<span class="rank-name">まだ記録がありません</span><span class="rank-time">--:--</span>`;
       list.appendChild(li);
       return;
     }
@@ -1710,16 +1692,9 @@ async function renderWeeklyRanking() {
     });
   } catch (error) {
     console.error(error);
-    list.innerHTML = `
-      <li>
-        <span class="rank-name">ランキング取得に失敗しました</span>
-        <span class="rank-time">--:--</span>
-      </li>
-    `;
+    list.innerHTML = `<li><span class="rank-name">ランキング取得に失敗しました</span><span class="rank-time">--:--</span></li>`;
   }
 }
-
-/* 履歴・自己ベスト */
 
 async function getPlayRecords() {
   const recordsRef = collection(db, "users", currentUser.uid, "records");
@@ -1847,8 +1822,6 @@ async function renderBestList() {
   }
 }
 
-/* 解答確認 */
-
 function renderReviewBoardFromRecord(record, tableElement) {
   tableElement.innerHTML = "";
 
@@ -1917,8 +1890,6 @@ function renderReviewBoardFromRecord(record, tableElement) {
   }
 }
 
-/* データ削除ログアウト */
-
 async function deleteCurrentUserData() {
   if (!currentUser) throw new Error("ログインしていません");
 
@@ -1964,8 +1935,6 @@ function resetLocalUserState() {
   resetState();
 }
 
-/* 保存用変換 */
-
 function matrixToObject(matrix) {
   const result = {};
 
@@ -1995,8 +1964,6 @@ function objectToMatrix(value, defaultValue) {
 
   return matrix;
 }
-
-/* 汎用関数 */
 
 function generateUniqueRandomNumbers(count, min, max, excludedSet = new Set()) {
   const result = [];
@@ -2028,9 +1995,7 @@ function generateUniqueRandomNumbersMixed(count, ranges, excludedSet = new Set()
 
   ranges.forEach(([min, max]) => {
     for (let n = min; n <= max; n++) {
-      if (!used.has(n)) {
-        candidates.push(n);
-      }
+      if (!used.has(n)) candidates.push(n);
     }
   });
 
@@ -2042,32 +2007,9 @@ function generateUniqueRandomNumbersMixed(count, ranges, excludedSet = new Set()
     result.push(value);
   }
 
-  if (result.length < count) {
-    throw new Error("十分な数字を生成できません");
-  }
+  if (result.length < count) throw new Error("十分な数字を生成できません");
 
   return result;
-}
-
-function gcd(a, b) {
-  let x = Math.abs(a);
-  let y = Math.abs(b);
-
-  while (y !== 0) {
-    const temp = y;
-    y = x % y;
-    x = temp;
-  }
-
-  return x;
-}
-
-function lcm(a, b) {
-  return Math.abs(a * b) / gcd(a, b);
-}
-
-function lcmArray(numbers) {
-  return numbers.reduce((acc, value) => lcm(acc, value), 1);
 }
 
 function shuffleArray(array) {
@@ -2106,8 +2048,7 @@ function getWeekId(date = new Date()) {
   const firstDayNumber = (firstThursday.getDay() + 6) % 7;
   firstThursday.setDate(firstThursday.getDate() - firstDayNumber + 3);
 
-  const weekNumber =
-    1 + Math.round((target - firstThursday) / (7 * 24 * 60 * 60 * 1000));
+  const weekNumber = 1 + Math.round((target - firstThursday) / (7 * 24 * 60 * 60 * 1000));
 
   return `${target.getFullYear()}-W${String(weekNumber).padStart(2, "0")}`;
 }
