@@ -879,11 +879,16 @@ keypad.addEventListener("click", event => {
     return;
   }
 
-  let value = key.textContent;
+  if (key.dataset.action === "enter") {
+    moveToNextCell();
+    return;
+  }
 
-  if (key.dataset.action === "zero") value = "0";
+  const value = key.dataset.value;
 
-  addDigit(value);
+  if (value !== undefined) {
+    addDigit(value);
+  }
 });
 
 document.addEventListener("keydown", event => {
@@ -920,7 +925,11 @@ document.addEventListener("keydown", event => {
     clearCell();
     return;
   }
-
+if (key === "Enter") {
+  event.preventDefault();
+  moveToNextCell();
+  return;
+}
   if (key === "ArrowRight") {
     event.preventDefault();
     moveToNextCell();
