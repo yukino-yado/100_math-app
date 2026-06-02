@@ -722,7 +722,9 @@ button {
   background:linear-gradient(135deg,#ffd6de,#ffdff7)
 }
 
-
+.key.wide {
+  grid-column:span 2
+}
 
 .keypad-note {
   display:none
@@ -1764,8 +1766,22 @@ button {
   }
 
 }
-/* 数字キー：全デバイスで順番を統一 */
 
+
+/* ===== 名前・一言・ランキング削除版 追加調整 ===== */
+.grade-badge,
+.profile-edit-grade {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: #fff0f8;
+  border: 1px solid #f1cfe4;
+  color: #9a5b85;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+/* 数字キー：全デバイスで並びを統一 */
 .keypad {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1775,19 +1791,14 @@ button {
   margin: 0 auto;
 }
 
-.key {
-  height: clamp(38px, 9vh, 56px);
-}
-
 .zero-key {
   grid-column: 1 / 5;
 }
 
 .enter-key {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
-/* PCでも数字キーの並びを変えない */
 @media (min-width: 900px) {
   .keypad {
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1797,29 +1808,12 @@ button {
     grid-column: 1 / 5;
   }
 
-  .enter-key {
-    font-size: 0.85rem;
+  .key.wide {
+    grid-column: auto;
   }
 }
 
-/* 低めのPC画面用 */
-@media (min-width: 900px) and (max-height: 760px) {
-  .key {
-    height: 42px;
-  }
-}
-
-/* スマホ用 */
 @media (max-width: 600px) {
-  .keypad {
-    gap: 6px;
-  }
-
-  .key {
-    height: 38px;
-    border-radius: 14px;
-  }
-
   .enter-key {
     font-size: 0.75rem;
   }

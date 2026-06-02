@@ -17,24 +17,20 @@ import {
   getDocs,
   deleteDoc,
   query,
-  where,
   orderBy,
   limit,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-/*
-  Firebase Consoleからコピーした設定に置き換えてください。
-*/
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+/* Firebase Consoleからコピーした設定に置き換えてください。 */
 const firebaseConfig = {
-  apiKey: "AIzaSyA1DwKuag7tuKC75aGWYq4AszDSJHONdy0",
-  authDomain: "math-app-89b47.firebaseapp.com",
-  projectId: "math-app-89b47",
-  storageBucket: "math-app-89b47.firebasestorage.app",
-  messagingSenderId: "908293875104",
-  appId: "1:908293875104:web:f4779d37faeae2e31830c5",
-  measurementId: "G-FEG9WC237V"
+  apiKey: "ここに入れる",
+  authDomain: "ここに入れる",
+  projectId: "ここに入れる",
+  storageBucket: "ここに入れる",
+  messagingSenderId: "ここに入れる",
+  appId: "ここに入れる",
+  measurementId: "ここに入れる"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -105,24 +101,11 @@ const THEME_REWARDS = [
   { key: "pinkpurple", name: "ピンクパープル", required: 70 }
 ];
 
-const BLOCKED_WORDS = [
-  "死ね", "殺す", "消えろ", "うざい", "キモい", "きもい",
-  "バカ", "ばか", "アホ", "あほ", "クソ", "くそ",
-  "黙れ", "だまれ", "fuck", "shit"
-];
-
 let currentUser = null;
 let currentProfile = null;
 let draftProfile = null;
-
-let selectedRegisterAvatar = "🐰";
 let selectedOperation = null;
 let selectedDifficulty = null;
-
-let currentRankingOperation = "add";
-let currentRankingDifficulty = "easy";
-let currentRankingGrade = "all";
-
 let previousScreenBeforeTutorial = "home";
 
 const state = {
@@ -153,120 +136,92 @@ const screens = {
   tutorial: document.getElementById("tutorialScreen")
 };
 
-const registerBtn = document.getElementById("registerBtn");
-const playerNameInput = document.getElementById("playerNameInput");
-const gradeSelect = document.getElementById("gradeSelect");
-const statusMessageInput = document.getElementById("statusMessageInput");
-const registerMessage = document.getElementById("registerMessage");
-const avatarPreview = document.getElementById("avatarPreview");
+const $ = id => document.getElementById(id);
 
-const homePlayerName = document.getElementById("homePlayerName");
-const menuPlayerName = document.getElementById("menuPlayerName");
-const homeGrade = document.getElementById("homeGrade");
-const menuGrade = document.getElementById("menuGrade");
-const homeStatusMessage = document.getElementById("homeStatusMessage");
-const menuStatusMessage = document.getElementById("menuStatusMessage");
-const homeAvatar = document.getElementById("homeAvatar");
-const menuAvatar = document.getElementById("menuAvatar");
+const registerBtn = $("registerBtn");
+const gradeSelect = $("gradeSelect");
+const registerMessage = $("registerMessage");
+const avatarPreview = $("avatarPreview");
+
+const homeGrade = $("homeGrade");
+const menuGrade = $("menuGrade");
+const homeAvatar = $("homeAvatar");
+const menuAvatar = $("menuAvatar");
 
 const modeButtons = document.querySelectorAll(".mode-btn");
-
-const difficultyModal = document.getElementById("difficultyModal");
-const difficultyModalBg = document.getElementById("difficultyModalBg");
-const closeDifficultyModalBtn = document.getElementById("closeDifficultyModalBtn");
-const difficultyModalTitle = document.getElementById("difficultyModalTitle");
+const difficultyModal = $("difficultyModal");
+const difficultyModalBg = $("difficultyModalBg");
+const closeDifficultyModalBtn = $("closeDifficultyModalBtn");
+const difficultyModalTitle = $("difficultyModalTitle");
 const modalDifficultyButtons = document.querySelectorAll(".modal-difficulty-btn");
 
-const gameBoard = document.getElementById("gameBoard");
-const reviewBoard = document.getElementById("reviewBoard");
-const historyReviewBoard = document.getElementById("historyReviewBoard");
+const gameBoard = $("gameBoard");
+const reviewBoard = $("reviewBoard");
+const historyReviewBoard = $("historyReviewBoard");
 
-const operationLabel = document.getElementById("operationLabel");
-const difficultyLabel = document.getElementById("difficultyLabel");
-const timerDisplay = document.getElementById("timer");
+const operationLabel = $("operationLabel");
+const difficultyLabel = $("difficultyLabel");
+const timerDisplay = $("timer");
 
-const resultOperationLabel = document.getElementById("resultOperationLabel");
-const resultDifficultyLabel = document.getElementById("resultDifficultyLabel");
+const resultOperationLabel = $("resultOperationLabel");
+const resultDifficultyLabel = $("resultDifficultyLabel");
+const correctCountEl = $("correctCount");
+const mistakeCountEl = $("mistakeCount");
+const rawTimeEl = $("rawTime");
+const penaltyTimeEl = $("penaltyTime");
+const finalTimeEl = $("finalTime");
+const bestBadge = $("bestBadge");
+const saveMessage = $("saveMessage");
+const unlockArea = $("unlockArea");
+const unlockList = $("unlockList");
+const reviewArea = $("reviewArea");
+const showReviewBtn = $("showReviewBtn");
 
-const correctCountEl = document.getElementById("correctCount");
-const mistakeCountEl = document.getElementById("mistakeCount");
-const rawTimeEl = document.getElementById("rawTime");
-const penaltyTimeEl = document.getElementById("penaltyTime");
-const finalTimeEl = document.getElementById("finalTime");
-const bestBadge = document.getElementById("bestBadge");
-const saveMessage = document.getElementById("saveMessage");
+const sideMenu = $("sideMenu");
+const sideMenuBg = $("sideMenuBg");
+const menuBtn = $("menuBtn");
+const closeMenuBtn = $("closeMenuBtn");
 
-const unlockArea = document.getElementById("unlockArea");
-const unlockList = document.getElementById("unlockList");
+const historyList = $("historyList");
+const historyDetailArea = $("historyDetailArea");
+const historyDetailText = $("historyDetailText");
+const bestList = $("bestList");
 
-const reviewArea = document.getElementById("reviewArea");
-const showReviewBtn = document.getElementById("showReviewBtn");
+const keypad = $("keypad");
+const finishBtn = $("finishBtn");
+const retryBtn = $("retryBtn");
+const backHomeBtn = $("backHomeBtn");
 
-const sideMenu = document.getElementById("sideMenu");
-const historyList = document.getElementById("historyList");
-const historyDetailArea = document.getElementById("historyDetailArea");
-const historyDetailText = document.getElementById("historyDetailText");
-const bestList = document.getElementById("bestList");
+const showHistoryBtn = $("showHistoryBtn");
+const showBestBtn = $("showBestBtn");
+const changeProfileBtn = $("changeProfileBtn");
+const showTutorialBtn = $("showTutorialBtn");
+const showHomeBtn = $("showHomeBtn");
+const logoutBtn = $("logoutBtn");
+const historyBackBtn = $("historyBackBtn");
+const bestBackBtn = $("bestBackBtn");
+const reloadHistoryBtn = $("reloadHistoryBtn");
 
-const rankingOperationSelect = document.getElementById("rankingOperationSelect");
-const rankingDifficultySelect = document.getElementById("rankingDifficultySelect");
-const rankingGradeSelect = document.getElementById("rankingGradeSelect");
-const applyRankingFilterBtn = document.getElementById("applyRankingFilterBtn");
+const countdownOverlay = $("countdownOverlay");
+const countdownText = $("countdownText");
 
-const keypad = document.getElementById("keypad");
-
-const finishBtn = document.getElementById("finishBtn");
-const retryBtn = document.getElementById("retryBtn");
-const backHomeBtn = document.getElementById("backHomeBtn");
-
-const menuBtn = document.getElementById("menuBtn");
-const closeMenuBtn = document.getElementById("closeMenuBtn");
-const sideMenuBg = document.getElementById("sideMenuBg");
-
-const showHistoryBtn = document.getElementById("showHistoryBtn");
-const showBestBtn = document.getElementById("showBestBtn");
-const changeProfileBtn = document.getElementById("changeProfileBtn");
-const showTutorialBtn = document.getElementById("showTutorialBtn");
-const showHomeBtn = document.getElementById("showHomeBtn");
-const logoutBtn = document.getElementById("logoutBtn");
-
-const historyBackBtn = document.getElementById("historyBackBtn");
-const bestBackBtn = document.getElementById("bestBackBtn");
-const reloadRankingBtn = document.getElementById("reloadRankingBtn");
-const reloadHistoryBtn = document.getElementById("reloadHistoryBtn");
-
-const countdownOverlay = document.getElementById("countdownOverlay");
-const countdownText = document.getElementById("countdownText");
-
-const profileBackBtn = document.getElementById("profileBackBtn");
-const editAvatarButton = document.getElementById("editAvatarButton");
-const editAvatarPreview = document.getElementById("editAvatarPreview");
-const profileAvatarPanel = document.getElementById("profileAvatarPanel");
+const profileBackBtn = $("profileBackBtn");
+const editAvatarButton = $("editAvatarButton");
+const editAvatarPreview = $("editAvatarPreview");
+const profileAvatarPanel = $("profileAvatarPanel");
 const editAvatarChoices = document.querySelectorAll(".edit-avatar-choice");
-
-const profilePlayCount = document.getElementById("profilePlayCount");
-const editProfileNameText = document.getElementById("editProfileNameText");
-const editProfileGradeText = document.getElementById("editProfileGradeText");
-const editStatusText = document.getElementById("editStatusText");
-
-const editNameGradeBtn = document.getElementById("editNameGradeBtn");
-const nameGradeEditPanel = document.getElementById("nameGradeEditPanel");
-const editPlayerNameInput = document.getElementById("editPlayerNameInput");
-const editGradeSelect = document.getElementById("editGradeSelect");
-const applyNameGradeBtn = document.getElementById("applyNameGradeBtn");
-
-const editStatusBtn = document.getElementById("editStatusBtn");
-const statusEditPanel = document.getElementById("statusEditPanel");
-const editStatusMessageInput = document.getElementById("editStatusMessageInput");
-const applyStatusBtn = document.getElementById("applyStatusBtn");
-
+const profilePlayCount = $("profilePlayCount");
+const editProfileGradeText = $("editProfileGradeText");
+const editGradeBtn = $("editGradeBtn");
+const gradeEditPanel = $("gradeEditPanel");
+const editGradeSelect = $("editGradeSelect");
+const applyGradeBtn = $("applyGradeBtn");
 const themeChoices = document.querySelectorAll(".theme-choice");
+const saveProfileBtn = $("saveProfileBtn");
+const profileEditMessage = $("profileEditMessage");
 
-const saveProfileBtn = document.getElementById("saveProfileBtn");
-const profileEditMessage = document.getElementById("profileEditMessage");
-
-const tutorialBackBtn = document.getElementById("tutorialBackBtn");
-const finishTutorialBtn = document.getElementById("finishTutorialBtn");
+const tutorialBackBtn = $("tutorialBackBtn");
+const finishTutorialBtn = $("finishTutorialBtn");
 
 initializeAuth();
 
@@ -279,7 +234,6 @@ function initializeAuth() {
   onAuthStateChanged(auth, async user => {
     try {
       if (!user) return;
-
       currentUser = user;
 
       const profile = await fetchProfile();
@@ -292,9 +246,6 @@ function initializeAuth() {
       currentProfile = normalizeProfile(profile);
       applyProfileToScreen();
       resetHomeSelection();
-      resetRankingSelects();
-
-      await renderWeeklyRanking();
 
       if (!currentProfile.hasSeenTutorial) {
         previousScreenBeforeTutorial = "home";
@@ -312,32 +263,10 @@ function initializeAuth() {
 }
 
 registerBtn.addEventListener("click", async () => {
-  const name = playerNameInput.value.trim();
   const grade = gradeSelect.value;
-  const statusMessage = normalizeStatusMessage(statusMessageInput.value);
-
-  if (!isValidPlayerName(name)) {
-    registerMessage.textContent = "1〜12文字で名前を入力してください";
-    return;
-  }
-
-  if (containsBlockedWord(name)) {
-    registerMessage.textContent = "名前に使えない言葉が含まれています";
-    return;
-  }
 
   if (!isValidGrade(grade)) {
     registerMessage.textContent = "学年を選んでください";
-    return;
-  }
-
-  if (!isValidStatusMessage(statusMessage)) {
-    registerMessage.textContent = "一言メッセージは24文字以内で入力してください";
-    return;
-  }
-
-  if (containsBlockedWord(statusMessage)) {
-    registerMessage.textContent = "一言メッセージに使えない言葉が含まれています";
     return;
   }
 
@@ -346,21 +275,17 @@ registerBtn.addEventListener("click", async () => {
 
   try {
     const profile = {
-      playerName: name,
       grade,
-      statusMessage,
-      avatar: selectedRegisterAvatar,
+      avatar: "🐰",
       selectedTheme: "pastel",
       playCount: 0,
       hasSeenTutorial: false
     };
 
     await saveProfile(profile);
-
     currentProfile = normalizeProfile(profile);
     applyProfileToScreen();
     resetHomeSelection();
-    resetRankingSelects();
 
     previousScreenBeforeTutorial = "home";
     switchScreen("tutorial");
@@ -373,25 +298,16 @@ registerBtn.addEventListener("click", async () => {
 });
 
 async function fetchProfile() {
-  if (!currentUser) return null;
-
   const profileRef = doc(db, "users", currentUser.uid, "profile", "main");
   const profileSnap = await getDoc(profileRef);
-
-  if (!profileSnap.exists()) return null;
-
-  return profileSnap.data();
+  return profileSnap.exists() ? profileSnap.data() : null;
 }
 
 async function saveProfile(profile) {
-  if (!currentUser) throw new Error("ログインしていません");
-
   const profileRef = doc(db, "users", currentUser.uid, "profile", "main");
 
   await setDoc(profileRef, {
-    playerName: profile.playerName,
     grade: profile.grade,
-    statusMessage: profile.statusMessage,
     avatar: profile.avatar || "🐰",
     selectedTheme: profile.selectedTheme || "pastel",
     playCount: Number(profile.playCount || 0),
@@ -413,7 +329,6 @@ async function updateProfileAfterGame(newPlayCount) {
 
 async function markTutorialSeen() {
   if (!currentProfile) return;
-
   currentProfile.hasSeenTutorial = true;
 
   const profileRef = doc(db, "users", currentUser.uid, "profile", "main");
@@ -424,38 +339,15 @@ async function markTutorialSeen() {
   }, { merge: true });
 }
 
-async function updateMyPublicResultsProfile(profile) {
-  if (!currentUser) return;
-
-  const q = query(
-    collection(db, "publicResults"),
-    where("uid", "==", currentUser.uid)
-  );
-
-  const snapshot = await getDocs(q);
-
-  const updates = snapshot.docs.map(docSnap => {
-    return setDoc(docSnap.ref, {
-      playerName: profile.playerName,
-      grade: profile.grade,
-      statusMessage: profile.statusMessage,
-      avatar: profile.avatar,
-      updatedAt: serverTimestamp()
-    }, { merge: true });
-  });
-
-  await Promise.all(updates);
-}
-
 function normalizeProfile(profile) {
   const playCount = Number(profile.playCount || 0);
   const avatar = isUnlockedAvatar(profile.avatar, playCount) ? profile.avatar : "🐰";
-  const selectedTheme = isUnlockedTheme(profile.selectedTheme, playCount) ? profile.selectedTheme : "pastel";
+  const selectedTheme = isUnlockedTheme(profile.selectedTheme, playCount)
+    ? profile.selectedTheme
+    : "pastel";
 
   return {
-    playerName: profile.playerName || "プレイヤー",
     grade: isValidGrade(profile.grade) ? profile.grade : "小6",
-    statusMessage: normalizeStatusMessage(profile.statusMessage || "今日もがんばる！"),
     avatar,
     selectedTheme,
     playCount,
@@ -464,34 +356,20 @@ function normalizeProfile(profile) {
 }
 
 function applyProfileToScreen() {
-  const name = currentProfile?.playerName || "プレイヤー";
   const avatar = currentProfile?.avatar || "🐰";
-  const grade = currentProfile?.grade || "";
-  const statusMessage = currentProfile?.statusMessage || "今日もがんばる！";
+  const grade = currentProfile?.grade || "小6";
   const theme = currentProfile?.selectedTheme || "pastel";
-
-  homePlayerName.textContent = name;
-  menuPlayerName.textContent = name;
 
   homeAvatar.textContent = avatar;
   menuAvatar.textContent = avatar;
-
   homeGrade.textContent = grade;
   menuGrade.textContent = grade;
-
-  homeStatusMessage.textContent = statusMessage;
-  menuStatusMessage.textContent = statusMessage;
-
-  homeGrade.classList.toggle("hidden", !grade);
-  menuGrade.classList.toggle("hidden", !grade);
-
   applyTheme(theme);
 }
 
 function resetHomeSelection() {
   selectedOperation = null;
   selectedDifficulty = null;
-
   modeButtons.forEach(button => button.classList.remove("active"));
   closeDifficultyModal();
 }
@@ -503,7 +381,6 @@ modeButtons.forEach(button => {
 
     modeButtons.forEach(btn => btn.classList.remove("active"));
     button.classList.add("active");
-
     openDifficultyModal(selectedOperation);
   });
 });
@@ -513,7 +390,6 @@ modalDifficultyButtons.forEach(button => {
     if (!selectedOperation) return;
 
     selectedDifficulty = button.dataset.difficulty;
-
     closeDifficultyModal();
 
     setTimeout(() => {
@@ -526,10 +402,7 @@ difficultyModalBg.addEventListener("click", closeDifficultyModal);
 closeDifficultyModalBtn.addEventListener("click", closeDifficultyModal);
 
 function openDifficultyModal(operation) {
-  const operationName = OPERATION_NAMES[operation] || "計算";
-
-  difficultyModalTitle.textContent = `${operationName} の難易度を選ぶ`;
-
+  difficultyModalTitle.textContent = `${OPERATION_NAMES[operation]} の難易度を選ぶ`;
   difficultyModal.classList.remove("hidden");
 
   requestAnimationFrame(() => {
@@ -539,7 +412,6 @@ function openDifficultyModal(operation) {
 
 function closeDifficultyModal() {
   if (!difficultyModal) return;
-
   difficultyModal.classList.remove("open");
 
   setTimeout(() => {
@@ -547,31 +419,11 @@ function closeDifficultyModal() {
   }, 260);
 }
 
-function resetRankingSelects() {
-  currentRankingOperation = "add";
-  currentRankingDifficulty = "easy";
-  currentRankingGrade = "all";
-
-  if (rankingOperationSelect) rankingOperationSelect.value = "add";
-  if (rankingDifficultySelect) rankingDifficultySelect.value = "easy";
-  if (rankingGradeSelect) rankingGradeSelect.value = "all";
-}
-
-applyRankingFilterBtn.addEventListener("click", async () => {
-  currentRankingOperation = rankingOperationSelect.value;
-  currentRankingDifficulty = rankingDifficultySelect.value;
-  currentRankingGrade = rankingGradeSelect.value;
-
-  await renderWeeklyRanking();
-});
-
 function openProfileEditScreen() {
   if (!currentProfile) return;
 
   draftProfile = {
-    playerName: currentProfile.playerName,
     grade: currentProfile.grade,
-    statusMessage: currentProfile.statusMessage,
     avatar: currentProfile.avatar,
     selectedTheme: currentProfile.selectedTheme,
     playCount: currentProfile.playCount,
@@ -579,8 +431,7 @@ function openProfileEditScreen() {
   };
 
   profileAvatarPanel.classList.add("hidden");
-  nameGradeEditPanel.classList.add("hidden");
-  statusEditPanel.classList.add("hidden");
+  gradeEditPanel.classList.add("hidden");
   profileEditMessage.textContent = "";
 
   syncProfileEditView();
@@ -591,14 +442,9 @@ function syncProfileEditView() {
   if (!draftProfile) return;
 
   editAvatarPreview.textContent = draftProfile.avatar || "🐰";
-  editProfileNameText.textContent = draftProfile.playerName || "プレイヤー";
   editProfileGradeText.textContent = draftProfile.grade || "小6";
-  editStatusText.textContent = draftProfile.statusMessage || "今日もがんばる！";
   profilePlayCount.textContent = `${draftProfile.playCount || 0}回`;
-
-  editPlayerNameInput.value = draftProfile.playerName || "";
   editGradeSelect.value = draftProfile.grade || "小6";
-  editStatusMessageInput.value = draftProfile.statusMessage || "今日もがんばる！";
 
   syncAvatarChoices();
   syncThemeChoices();
@@ -632,8 +478,7 @@ function syncThemeChoices() {
 
 editAvatarButton.addEventListener("click", () => {
   profileAvatarPanel.classList.toggle("hidden");
-  nameGradeEditPanel.classList.add("hidden");
-  statusEditPanel.classList.add("hidden");
+  gradeEditPanel.classList.add("hidden");
 });
 
 editAvatarChoices.forEach(button => {
@@ -669,92 +514,31 @@ themeChoices.forEach(button => {
   });
 });
 
-editNameGradeBtn.addEventListener("click", () => {
-  nameGradeEditPanel.classList.toggle("hidden");
+editGradeBtn.addEventListener("click", () => {
+  gradeEditPanel.classList.toggle("hidden");
   profileAvatarPanel.classList.add("hidden");
-  statusEditPanel.classList.add("hidden");
   syncProfileEditView();
 });
 
-applyNameGradeBtn.addEventListener("click", () => {
-  const name = editPlayerNameInput.value.trim();
+applyGradeBtn.addEventListener("click", () => {
   const grade = editGradeSelect.value;
-
-  if (!isValidPlayerName(name)) {
-    profileEditMessage.textContent = "1〜12文字で名前を入力してください";
-    return;
-  }
-
-  if (containsBlockedWord(name)) {
-    profileEditMessage.textContent = "名前に使えない言葉が含まれています";
-    return;
-  }
 
   if (!isValidGrade(grade)) {
     profileEditMessage.textContent = "学年を選んでください";
     return;
   }
 
-  draftProfile.playerName = name;
   draftProfile.grade = grade;
-
   profileEditMessage.textContent = "";
-  nameGradeEditPanel.classList.add("hidden");
-  syncProfileEditView();
-});
-
-editStatusBtn.addEventListener("click", () => {
-  statusEditPanel.classList.toggle("hidden");
-  profileAvatarPanel.classList.add("hidden");
-  nameGradeEditPanel.classList.add("hidden");
-  syncProfileEditView();
-});
-
-applyStatusBtn.addEventListener("click", () => {
-  const statusMessage = normalizeStatusMessage(editStatusMessageInput.value);
-
-  if (!isValidStatusMessage(statusMessage)) {
-    profileEditMessage.textContent = "一言メッセージは24文字以内で入力してください";
-    return;
-  }
-
-  if (containsBlockedWord(statusMessage)) {
-    profileEditMessage.textContent = "一言メッセージに使えない言葉が含まれています";
-    return;
-  }
-
-  draftProfile.statusMessage = statusMessage;
-
-  profileEditMessage.textContent = "";
-  statusEditPanel.classList.add("hidden");
+  gradeEditPanel.classList.add("hidden");
   syncProfileEditView();
 });
 
 saveProfileBtn.addEventListener("click", async () => {
   if (!draftProfile) return;
 
-  if (!isValidPlayerName(draftProfile.playerName)) {
-    profileEditMessage.textContent = "1〜12文字で名前を入力してください";
-    return;
-  }
-
-  if (containsBlockedWord(draftProfile.playerName)) {
-    profileEditMessage.textContent = "名前に使えない言葉が含まれています";
-    return;
-  }
-
   if (!isValidGrade(draftProfile.grade)) {
     profileEditMessage.textContent = "学年を選んでください";
-    return;
-  }
-
-  if (!isValidStatusMessage(draftProfile.statusMessage)) {
-    profileEditMessage.textContent = "一言メッセージは24文字以内で入力してください";
-    return;
-  }
-
-  if (containsBlockedWord(draftProfile.statusMessage)) {
-    profileEditMessage.textContent = "一言メッセージに使えない言葉が含まれています";
     return;
   }
 
@@ -773,20 +557,11 @@ saveProfileBtn.addEventListener("click", async () => {
 
   try {
     await saveProfile(draftProfile);
-
-    try {
-      await updateMyPublicResultsProfile(draftProfile);
-    } catch (error) {
-      console.warn("ランキング側プロフィール更新に失敗しました", error);
-    }
-
     currentProfile = normalizeProfile(draftProfile);
     applyProfileToScreen();
-
     profileEditMessage.textContent = "保存しました！";
 
-    setTimeout(async () => {
-      await renderWeeklyRanking();
+    setTimeout(() => {
       switchScreen("home");
     }, 450);
   } catch (error) {
@@ -796,10 +571,6 @@ saveProfileBtn.addEventListener("click", async () => {
     saveProfileBtn.disabled = false;
   }
 });
-
-function isValidPlayerName(name) {
-  return name.length >= 1 && name.length <= 12;
-}
 
 function isValidGrade(grade) {
   return GRADES.includes(grade);
@@ -819,30 +590,6 @@ function isUnlockedTheme(theme, playCount) {
   return Boolean(item) && playCount >= item.required;
 }
 
-function isValidStatusMessage(message) {
-  return message.length >= 0 && message.length <= 24;
-}
-
-function normalizeStatusMessage(message) {
-  const text = String(message || "").trim();
-  return text === "" ? "今日もがんばる！" : text;
-}
-
-function normalizeForFilter(text) {
-  return String(text || "")
-    .toLowerCase()
-    .replace(/\s+/g, "")
-    .replace(/[！!？?。、,.・ー\-＿_]/g, "");
-}
-
-function containsBlockedWord(text) {
-  const normalized = normalizeForFilter(text);
-
-  return BLOCKED_WORDS.some(word => {
-    return normalized.includes(normalizeForFilter(word));
-  });
-}
-
 finishBtn.addEventListener("click", finishGame);
 
 retryBtn.addEventListener("click", () => {
@@ -850,14 +597,10 @@ retryBtn.addEventListener("click", () => {
   startGame(state.lastRecord.operation, state.lastRecord.difficulty);
 });
 
-backHomeBtn.addEventListener("click", async () => {
-  await renderWeeklyRanking();
-  switchScreen("home");
-});
+backHomeBtn.addEventListener("click", () => switchScreen("home"));
 
 showReviewBtn.addEventListener("click", () => {
   reviewArea.classList.toggle("hidden");
-
   showReviewBtn.textContent = reviewArea.classList.contains("hidden")
     ? "自分の解答を確認"
     : "解答確認を閉じる";
@@ -885,10 +628,7 @@ keypad.addEventListener("click", event => {
   }
 
   const value = key.dataset.value;
-
-  if (value !== undefined) {
-    addDigit(value);
-  }
+  if (value !== undefined) addDigit(value);
 });
 
 document.addEventListener("keydown", event => {
@@ -906,11 +646,7 @@ document.addEventListener("keydown", event => {
 
   if (key === "-") {
     event.preventDefault();
-
-    if (canUseNegativeAnswer()) {
-      toggleMinusSign();
-    }
-
+    if (canUseNegativeAnswer()) toggleMinusSign();
     return;
   }
 
@@ -925,12 +661,8 @@ document.addEventListener("keydown", event => {
     clearCell();
     return;
   }
-if (key === "Enter") {
-  event.preventDefault();
-  moveToNextCell();
-  return;
-}
-  if (key === "ArrowRight") {
+
+  if (key === "Enter" || key === "ArrowRight") {
     event.preventDefault();
     moveToNextCell();
   }
@@ -939,9 +671,7 @@ if (key === "Enter") {
 document.addEventListener(
   "dblclick",
   event => {
-    if (isScreenActive("game")) {
-      event.preventDefault();
-    }
+    if (isScreenActive("game")) event.preventDefault();
   },
   { passive: false }
 );
@@ -973,35 +703,18 @@ showTutorialBtn.addEventListener("click", () => {
   setTimeout(() => switchScreen("tutorial"), 320);
 });
 
-showHomeBtn.addEventListener("click", async () => {
+showHomeBtn.addEventListener("click", () => {
   closeMenu();
-  await renderWeeklyRanking();
   switchScreen("home");
 });
 
-historyBackBtn.addEventListener("click", async () => {
-  await renderWeeklyRanking();
-  switchScreen("home");
-});
-
-bestBackBtn.addEventListener("click", async () => {
-  await renderWeeklyRanking();
-  switchScreen("home");
-});
-
-profileBackBtn.addEventListener("click", async () => {
-  await renderWeeklyRanking();
-  switchScreen("home");
-});
-
-reloadRankingBtn.addEventListener("click", renderWeeklyRanking);
+historyBackBtn.addEventListener("click", () => switchScreen("home"));
+bestBackBtn.addEventListener("click", () => switchScreen("home"));
+profileBackBtn.addEventListener("click", () => switchScreen("home"));
 reloadHistoryBtn.addEventListener("click", renderHistoryList);
 
 tutorialBackBtn.addEventListener("click", async () => {
-  if (currentProfile && !currentProfile.hasSeenTutorial) {
-    await markTutorialSeen();
-  }
-
+  if (currentProfile && !currentProfile.hasSeenTutorial) await markTutorialSeen();
   switchScreen(previousScreenBeforeTutorial || "home");
 });
 
@@ -1012,12 +725,11 @@ finishTutorialBtn.addEventListener("click", async () => {
 
 logoutBtn.addEventListener("click", async () => {
   const firstConfirm = confirm(
-    "この操作を行うと、現在のプレイヤーデータを削除してログアウトします。\n\n" +
+    "この操作を行うと、現在のデータを削除してログアウトします。\n\n" +
     "削除されるもの：\n" +
     "・プロフィール\n" +
     "・過去の記録\n" +
-    "・自己ベスト\n" +
-    "・今週のランキング上の自分の記録\n\n" +
+    "・自己ベスト\n\n" +
     "この操作は取り消せません。\n\n" +
     "本当に続けますか？"
   );
@@ -1026,8 +738,8 @@ logoutBtn.addEventListener("click", async () => {
 
   const secondConfirm = confirm(
     "最終確認です。\n\n" +
-    "ログアウト後、この端末では前のプレイヤーデータに戻れません。\n" +
-    "次に開くと、新しいプレイヤーとして登録し直すことになります。\n\n" +
+    "ログアウト後、この端末では前のデータに戻れません。\n" +
+    "次に開くと、新しく登録し直すことになります。\n\n" +
     "本当にデータを削除してログアウトしますか？"
   );
 
@@ -1036,18 +748,13 @@ logoutBtn.addEventListener("click", async () => {
   closeMenu();
 
   try {
-    saveMessage.textContent = "";
-    registerMessage.textContent = "";
-
     await deleteCurrentUserData();
     await signOut(auth);
-
     resetLocalUserState();
     switchScreen("register");
-
     await signInAnonymously(auth);
   } catch (error) {
-    console.error("データ削除ログアウトに失敗しました", error);
+    console.error(error);
     alert("データ削除またはログアウトに失敗しました。通信状態やFirebaseルールを確認してください。");
   }
 });
@@ -1072,9 +779,7 @@ async function startGame(operation, difficulty) {
 
     finishBtn.disabled = true;
     state.isCountingDown = true;
-
     await runCountdown();
-
     state.isCountingDown = false;
     finishBtn.disabled = false;
 
@@ -1083,10 +788,8 @@ async function startGame(operation, difficulty) {
   } catch (error) {
     console.error(error);
     alert("問題の作成に失敗しました。\n" + error.message);
-
     state.isCountingDown = false;
     finishBtn.disabled = false;
-
     switchScreen("home");
   }
 }
@@ -1117,7 +820,6 @@ function resetState() {
 
 async function runCountdown() {
   const counts = ["3", "2", "1", "Go!"];
-
   countdownOverlay.classList.remove("hidden");
 
   for (const count of counts) {
@@ -1125,11 +827,7 @@ async function runCountdown() {
     countdownText.classList.remove("pop", "go");
     void countdownText.offsetWidth;
     countdownText.classList.add("pop");
-
-    if (count === "Go!") {
-      countdownText.classList.add("go");
-    }
-
+    if (count === "Go!") countdownText.classList.add("go");
     await sleep(800);
   }
 
@@ -1185,11 +883,7 @@ function generateSubHeaders(difficulty) {
 
   if (!allowNegative && difficulty !== "easy") {
     const minRow = Math.min(...state.rowNumbers);
-
-    state.colNumbers = state.colNumbers.map(value => {
-      if (value <= minRow) return value;
-      return randomInt(1, minRow);
-    });
+    state.colNumbers = state.colNumbers.map(value => value <= minRow ? value : randomInt(1, minRow));
   }
 }
 
@@ -1213,31 +907,17 @@ function generateMulHeaders(difficulty) {
 function generateDivHeaders(difficulty) {
   if (difficulty === "easy") {
     state.colNumbers = [1, 2, 3, 6, 1, 2, 3, 6, 1, 2];
-    state.rowNumbers = generateDivisionRows({
-      min: 12,
-      max: 96,
-      base: 6
-    });
+    state.rowNumbers = generateDivisionRows({ min: 12, max: 96, base: 6 });
   }
 
   if (difficulty === "normal") {
     state.colNumbers = [1, 2, 3, 4, 6, 8, 1, 2, 3, 4];
-    state.rowNumbers = generateDivisionRows({
-      min: 120,
-      max: 984,
-      base: 24,
-      evenOnesPlace: true
-    });
+    state.rowNumbers = generateDivisionRows({ min: 120, max: 984, base: 24, evenOnesPlace: true });
   }
 
   if (difficulty === "hard") {
     state.colNumbers = [2, 3, 4, 5, 6, 10, 12, 2, 3, 4];
-    state.rowNumbers = generateDivisionRows({
-      min: 120,
-      max: 960,
-      base: 60,
-      evenOnesPlace: true
-    });
+    state.rowNumbers = generateDivisionRows({ min: 120, max: 960, base: 60, evenOnesPlace: true });
   }
 }
 
@@ -1247,7 +927,6 @@ function generateDivisionRows({ min, max, base, evenOnesPlace = false }) {
   for (let n = min; n <= max; n++) {
     if (n % base !== 0) continue;
     if (evenOnesPlace && n % 2 !== 0) continue;
-
     candidates.push(n);
   }
 
@@ -1263,7 +942,6 @@ function generateCorrectAnswers() {
     for (let c = 0; c < GRID_SIZE; c++) {
       const rowValue = state.rowNumbers[r];
       const colValue = state.colNumbers[c];
-
       let answer = 0;
 
       if (state.operation === "add") answer = rowValue + colValue;
@@ -1278,10 +956,9 @@ function generateCorrectAnswers() {
 
 function renderGameBoard() {
   gameBoard.innerHTML = "";
-
   const firstRow = document.createElement("tr");
-
   const corner = document.createElement("td");
+
   corner.className = "corner-cell";
   corner.textContent = state.symbol;
   firstRow.appendChild(corner);
@@ -1297,8 +974,8 @@ function renderGameBoard() {
 
   for (let r = 0; r < GRID_SIZE; r++) {
     const tr = document.createElement("tr");
-
     const header = document.createElement("td");
+
     header.className = "header-cell";
     header.textContent = state.rowNumbers[r];
     tr.appendChild(header);
@@ -1314,7 +991,6 @@ function renderGameBoard() {
       const span = document.createElement("span");
       span.className = "answer-text";
       span.textContent = state.answers[r][c];
-
       td.appendChild(span);
 
       td.addEventListener("click", () => {
@@ -1332,16 +1008,11 @@ function renderGameBoard() {
 function addDigit(digit) {
   const { row, col } = state.selectedCell;
   const current = state.answers[row][col];
-
   if (current.length >= 6) return;
 
-  if (current === "0") {
-    state.answers[row][col] = digit;
-  } else if (current === "-0") {
-    state.answers[row][col] = "-" + digit;
-  } else {
-    state.answers[row][col] += digit;
-  }
+  if (current === "0") state.answers[row][col] = digit;
+  else if (current === "-0") state.answers[row][col] = "-" + digit;
+  else state.answers[row][col] += digit;
 
   renderGameBoard();
 }
@@ -1349,13 +1020,7 @@ function addDigit(digit) {
 function toggleMinusSign() {
   const { row, col } = state.selectedCell;
   const current = state.answers[row][col];
-
-  if (current.startsWith("-")) {
-    state.answers[row][col] = current.slice(1);
-  } else {
-    state.answers[row][col] = "-" + current;
-  }
-
+  state.answers[row][col] = current.startsWith("-") ? current.slice(1) : "-" + current;
   renderGameBoard();
 }
 
@@ -1379,7 +1044,6 @@ function moveToNextCell() {
   }
 
   let { row, col } = state.selectedCell;
-
   col++;
 
   if (col >= GRID_SIZE) {
@@ -1420,26 +1084,15 @@ async function finishGame() {
       const correctAnswer = state.correctAnswers[r][c];
 
       if (userAnswerText !== "") answeredCount++;
-
-      if (userAnswerText !== "" && userAnswer === correctAnswer) {
-        correct++;
-      } else {
-        mistakes++;
-      }
+      if (userAnswerText !== "" && userAnswer === correctAnswer) correct++;
+      else mistakes++;
     }
   }
 
   const isCompletedAllCells = answeredCount === GRID_SIZE * GRID_SIZE;
   const penalty = mistakes * PENALTY_SECONDS;
   const finalSeconds = state.elapsedSeconds + penalty;
-
-  let isBest = false;
-
-  try {
-    isBest = await isPersonalBest(state.operation, state.difficulty, finalSeconds);
-  } catch (error) {
-    console.error("自己ベスト判定に失敗しました", error);
-  }
+  const isBest = await isPersonalBest(state.operation, state.difficulty, finalSeconds);
 
   correctCountEl.textContent = `${correct} / 100`;
   mistakeCountEl.textContent = `${mistakes}問`;
@@ -1449,28 +1102,22 @@ async function finishGame() {
 
   resultOperationLabel.textContent = OPERATION_NAMES[state.operation];
   resultDifficultyLabel.textContent = DIFFICULTIES[state.difficulty];
-
   bestBadge.classList.toggle("hidden", !isBest);
 
   const oldPlayCount = currentProfile.playCount || 0;
   const newPlayCount = isCompletedAllCells ? oldPlayCount + 1 : oldPlayCount;
   const unlockMessages = isCompletedAllCells ? getUnlockMessages(oldPlayCount, newPlayCount) : [];
-
   renderUnlockMessages(unlockMessages);
 
   const record = {
-    playerName: currentProfile.playerName,
     grade: currentProfile.grade,
-    statusMessage: currentProfile.statusMessage,
     avatar: currentProfile.avatar,
-    uid: currentUser.uid,
     operation: state.operation,
     operationLabel: OPERATION_NAMES[state.operation],
     difficulty: state.difficulty,
     difficultyLabel: DIFFICULTIES[state.difficulty],
     symbol: state.symbol,
     date: new Date().toLocaleString("ja-JP"),
-    weekId: getWeekId(),
     correct,
     mistakes,
     answeredCount,
@@ -1492,17 +1139,13 @@ async function finishGame() {
     saveMessage.textContent = "記録を保存中...";
     await savePlayRecord(record);
 
-    if (isCompletedAllCells) {
-      await updateProfileAfterGame(newPlayCount);
-    }
+    if (isCompletedAllCells) await updateProfileAfterGame(newPlayCount);
 
     saveMessage.textContent = isCompletedAllCells
       ? "記録を保存しました！プレイ回数が1回増えました。"
       : "記録を保存しました。100問すべて入力するとプレイ回数が増えます。";
-
-    await renderWeeklyRanking();
   } catch (error) {
-    console.error("記録の保存に失敗しました", error);
+    console.error(error);
     saveMessage.textContent = "記録の保存に失敗しました";
   } finally {
     finishBtn.disabled = false;
@@ -1551,158 +1194,20 @@ async function savePlayRecord(record) {
     ...record,
     createdAt: serverTimestamp()
   });
-
-  await savePublicBestResult(record);
-}
-
-async function savePublicBestResult(record) {
-  const publicResultId = `${record.weekId}_${record.operation}_${record.difficulty}_${currentUser.uid}`;
-  const publicResultRef = doc(db, "publicResults", publicResultId);
-
-  const publicResultSnap = await getDoc(publicResultRef);
-
-  const publicResult = {
-    uid: currentUser.uid,
-    playerName: currentProfile.playerName,
-    grade: currentProfile.grade,
-    statusMessage: currentProfile.statusMessage,
-    avatar: currentProfile.avatar,
-    operation: record.operation,
-    operationLabel: record.operationLabel,
-    difficulty: record.difficulty,
-    difficultyLabel: record.difficultyLabel,
-    correct: record.correct,
-    mistakes: record.mistakes,
-    answeredCount: record.answeredCount,
-    isCompletedAllCells: record.isCompletedAllCells,
-    rawTime: record.rawTime,
-    penalty: record.penalty,
-    finalTime: record.finalTime,
-    weekId: record.weekId,
-    date: record.date,
-    updatedAt: serverTimestamp()
-  };
-
-  if (!publicResultSnap.exists()) {
-    await setDoc(publicResultRef, {
-      ...publicResult,
-      createdAt: serverTimestamp()
-    });
-    return;
-  }
-
-  const oldResult = publicResultSnap.data();
-
-  if (record.finalTime < oldResult.finalTime) {
-    await setDoc(publicResultRef, publicResult, { merge: true });
-    return;
-  }
-
-  await setDoc(publicResultRef, {
-    playerName: currentProfile.playerName,
-    grade: currentProfile.grade,
-    statusMessage: currentProfile.statusMessage,
-    avatar: currentProfile.avatar,
-    updatedAt: serverTimestamp()
-  }, { merge: true });
 }
 
 async function isPersonalBest(operation, difficulty, finalTime) {
   const recordsRef = collection(db, "users", currentUser.uid, "records");
+  const snapshot = await getDocs(recordsRef);
 
-  const q = query(
-    recordsRef,
-    where("operation", "==", operation),
-    where("difficulty", "==", difficulty)
-  );
+  const sameRecords = snapshot.docs
+    .map(docSnap => docSnap.data())
+    .filter(record => record.operation === operation && record.difficulty === difficulty);
 
-  const snapshot = await getDocs(q);
+  if (sameRecords.length === 0) return true;
 
-  if (snapshot.empty) return true;
-
-  const records = snapshot.docs.map(docSnap => docSnap.data());
-  const bestTime = Math.min(...records.map(record => record.finalTime));
-
+  const bestTime = Math.min(...sameRecords.map(record => record.finalTime));
   return finalTime < bestTime;
-}
-
-async function renderWeeklyRanking() {
-  const list = document.getElementById("weeklyRankingList");
-
-  list.innerHTML = `<li><span class="rank-name">読み込み中...</span><span class="rank-time">--:--</span></li>`;
-
-  try {
-    const weekId = getWeekId();
-
-    let q;
-
-    if (currentRankingGrade === "all") {
-      q = query(
-        collection(db, "publicResults"),
-        where("weekId", "==", weekId),
-        where("operation", "==", currentRankingOperation),
-        where("difficulty", "==", currentRankingDifficulty)
-      );
-    } else {
-      q = query(
-        collection(db, "publicResults"),
-        where("weekId", "==", weekId),
-        where("operation", "==", currentRankingOperation),
-        where("difficulty", "==", currentRankingDifficulty),
-        where("grade", "==", currentRankingGrade)
-      );
-    }
-
-    const snapshot = await getDocs(q);
-    list.innerHTML = "";
-
-    if (snapshot.empty) {
-      const li = document.createElement("li");
-      li.innerHTML = `<span class="rank-name">まだ記録がありません</span><span class="rank-time">--:--</span>`;
-      list.appendChild(li);
-      return;
-    }
-
-    const bestByUser = new Map();
-
-    snapshot.docs.forEach(docSnap => {
-      const data = docSnap.data();
-      if (!data.uid) return;
-
-      const existing = bestByUser.get(data.uid);
-
-      if (!existing || data.finalTime < existing.finalTime) {
-        bestByUser.set(data.uid, data);
-      }
-    });
-
-    const ranking = Array.from(bestByUser.values())
-      .sort((a, b) => a.finalTime - b.finalTime)
-      .slice(0, 10);
-
-    ranking.forEach((player, index) => {
-      const li = document.createElement("li");
-
-      const name = document.createElement("span");
-      name.className = "rank-name";
-
-      const avatarText = player.avatar || "🐰";
-      const gradeText = player.grade ? ` ${player.grade}` : "";
-
-      name.textContent = `${getRankEmoji(index)} ${avatarText} ${player.playerName}${gradeText}`;
-
-      const time = document.createElement("span");
-      time.className = "rank-time";
-      time.textContent = formatTime(player.finalTime);
-
-      li.appendChild(name);
-      li.appendChild(time);
-      list.appendChild(li);
-    });
-  } catch (error) {
-    console.error(error);
-    list.innerHTML = `<li><span class="rank-name">ランキング取得に失敗しました</span><span class="rank-time">--:--</span></li>`;
-  }
 }
 
 async function getPlayRecords() {
@@ -1751,15 +1256,11 @@ async function renderHistoryList() {
       const detailButton = document.createElement("button");
       detailButton.className = "detail-btn";
       detailButton.textContent = "詳細を見る";
-
-      detailButton.addEventListener("click", () => {
-        showHistoryDetail(record);
-      });
+      detailButton.addEventListener("click", () => showHistoryDetail(record));
 
       item.appendChild(title);
       item.appendChild(meta);
       item.appendChild(detailButton);
-
       historyList.appendChild(item);
     });
   } catch (error) {
@@ -1838,7 +1339,6 @@ function renderReviewBoardFromRecord(record, tableElement) {
   const correctAnswers = objectToMatrix(record.correctAnswers, 0);
 
   const firstRow = document.createElement("tr");
-
   const corner = document.createElement("td");
   corner.className = "corner-cell";
   corner.textContent = record.symbol;
@@ -1855,7 +1355,6 @@ function renderReviewBoardFromRecord(record, tableElement) {
 
   for (let r = 0; r < GRID_SIZE; r++) {
     const tr = document.createElement("tr");
-
     const header = document.createElement("td");
     header.className = "header-cell";
     header.textContent = record.rowNumbers[r];
@@ -1863,17 +1362,12 @@ function renderReviewBoardFromRecord(record, tableElement) {
 
     for (let c = 0; c < GRID_SIZE; c++) {
       const td = document.createElement("td");
-
       const user = userAnswers[r][c];
       const correct = correctAnswers[r][c];
 
-      if (user === "") {
-        td.className = "empty";
-      } else if (Number(user) === correct) {
-        td.className = "correct";
-      } else {
-        td.className = "wrong";
-      }
+      if (user === "") td.className = "empty";
+      else if (Number(user) === correct) td.className = "correct";
+      else td.className = "wrong";
 
       const wrap = document.createElement("div");
       wrap.className = "review-cell-wrap";
@@ -1881,7 +1375,6 @@ function renderReviewBoardFromRecord(record, tableElement) {
       const userAnswer = document.createElement("div");
       userAnswer.className = "review-user-answer";
       userAnswer.textContent = user === "" ? "空欄" : user;
-
       wrap.appendChild(userAnswer);
 
       if (user === "" || Number(user) !== correct) {
@@ -1900,47 +1393,21 @@ function renderReviewBoardFromRecord(record, tableElement) {
 }
 
 async function deleteCurrentUserData() {
-  if (!currentUser) throw new Error("ログインしていません");
-
   const uid = currentUser.uid;
-
-  await deleteUserProfile(uid);
-  await deleteUserRecords(uid);
-  await deleteUserPublicResults(uid);
-}
-
-async function deleteUserProfile(uid) {
   await deleteDoc(doc(db, "users", uid, "profile", "main"));
-}
 
-async function deleteUserRecords(uid) {
-  const recordsRef = collection(db, "users", uid, "records");
-  const snapshot = await getDocs(recordsRef);
-
-  await Promise.all(snapshot.docs.map(docSnap => deleteDoc(docSnap.ref)));
-}
-
-async function deleteUserPublicResults(uid) {
-  const q = query(collection(db, "publicResults"), where("uid", "==", uid));
-  const snapshot = await getDocs(q);
-
-  await Promise.all(snapshot.docs.map(docSnap => deleteDoc(docSnap.ref)));
+  const recordsSnapshot = await getDocs(collection(db, "users", uid, "records"));
+  await Promise.all(recordsSnapshot.docs.map(docSnap => deleteDoc(docSnap.ref)));
 }
 
 function resetLocalUserState() {
   currentUser = null;
   currentProfile = null;
   draftProfile = null;
-  selectedRegisterAvatar = "🐰";
-
-  playerNameInput.value = "";
   gradeSelect.value = "";
-  statusMessageInput.value = "";
   avatarPreview.textContent = "🐰";
   registerMessage.textContent = "";
-
   resetHomeSelection();
-  resetRankingSelects();
   resetState();
 }
 
@@ -1977,7 +1444,6 @@ function objectToMatrix(value, defaultValue) {
 function generateUniqueRandomNumbers(count, min, max, excludedSet = new Set()) {
   const result = [];
   const used = new Set(excludedSet);
-
   const excludedInRangeCount = [...excludedSet].filter(n => n >= min && n <= max).length;
   const possibleCount = max - min + 1 - excludedInRangeCount;
 
@@ -1987,7 +1453,6 @@ function generateUniqueRandomNumbers(count, min, max, excludedSet = new Set()) {
 
   while (result.length < count) {
     const value = randomInt(min, max);
-
     if (!used.has(value)) {
       used.add(value);
       result.push(value);
@@ -2017,7 +1482,6 @@ function generateUniqueRandomNumbersMixed(count, ranges, excludedSet = new Set()
   }
 
   if (result.length < count) throw new Error("十分な数字を生成できません");
-
   return result;
 }
 
@@ -2042,47 +1506,16 @@ function canUseNegativeAnswer() {
 
 function applyTheme(theme) {
   const validTheme = isValidTheme(theme) ? theme : "pastel";
-
   document.body.className = "";
   document.body.classList.add(`theme-${validTheme}`);
 }
 
-function getWeekId(date = new Date()) {
-  const target = new Date(date.valueOf());
-
-  const dayNumber = (date.getDay() + 6) % 7;
-  target.setDate(target.getDate() - dayNumber + 3);
-
-  const firstThursday = new Date(target.getFullYear(), 0, 4);
-  const firstDayNumber = (firstThursday.getDay() + 6) % 7;
-  firstThursday.setDate(firstThursday.getDate() - firstDayNumber + 3);
-
-  const weekNumber = 1 + Math.round((target - firstThursday) / (7 * 24 * 60 * 60 * 1000));
-
-  return `${target.getFullYear()}-W${String(weekNumber).padStart(2, "0")}`;
-}
-
-function getRankEmoji(index) {
-  if (index === 0) return "🥇";
-  if (index === 1) return "🥈";
-  if (index === 2) return "🥉";
-  return `${index + 1}位`;
-}
-
 function switchScreen(screenName) {
-  Object.values(screens).forEach(screen => {
-    screen.classList.remove("active");
-  });
-
+  Object.values(screens).forEach(screen => screen.classList.remove("active"));
   const targetScreen = screens[screenName];
   if (!targetScreen) return;
-
   targetScreen.classList.add("active");
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function isScreenActive(screenName) {
@@ -2095,18 +1528,12 @@ function getActiveScreenName() {
 
 function openMenu() {
   sideMenu.classList.remove("hidden");
-
-  requestAnimationFrame(() => {
-    sideMenu.classList.add("open");
-  });
+  requestAnimationFrame(() => sideMenu.classList.add("open"));
 }
 
 function closeMenu() {
   sideMenu.classList.remove("open");
-
-  setTimeout(() => {
-    sideMenu.classList.add("hidden");
-  }, 320);
+  setTimeout(() => sideMenu.classList.add("hidden"), 320);
 }
 
 function formatTime(seconds) {
@@ -2124,7 +1551,5 @@ function deepCopy(value) {
 }
 
 function sleep(ms) {
-  return new Promise(resolve => {
-    setTimeout(resolve, ms);
-  });
+  return new Promise(resolve => setTimeout(resolve, ms));
 }

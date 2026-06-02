@@ -2,10 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-  />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>100マス計算アプリ</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -14,35 +11,15 @@
     <section id="registerScreen" class="screen">
       <div class="card register-card">
         <h1>🎀 100マス計算 🎀</h1>
-        <p class="subtitle">まずはプロフィールを登録してね</p>
-
+        <p class="subtitle">まずは学年を登録してね</p>
         <div id="avatarPreview" class="avatar-preview">🐰</div>
-
-        <label class="input-label" for="playerNameInput">プレイヤー名</label>
-        <input id="playerNameInput" class="name-input" type="text" maxlength="12" placeholder="例：ゆい" />
-
         <label class="input-label" for="gradeSelect">学年</label>
         <select id="gradeSelect" class="grade-select">
-          <option value="">学年を選んでください</option>
-          <option value="小3">小3</option>
-          <option value="小4">小4</option>
-          <option value="小5">小5</option>
-          <option value="小6">小6</option>
-          <option value="中1">中1</option>
-          <option value="中2">中2</option>
-          <option value="中3">中3</option>
+          <option value="">学年を選んでください</option><option value="小3">小3</option><option value="小4">小4</option><option value="小5">小5</option><option value="小6">小6</option><option value="中1">中1</option><option value="中2">中2</option><option value="中3">中3</option>
         </select>
-
-        <label class="input-label" for="statusMessageInput">一言メッセージ</label>
-        <input id="statusMessageInput" class="name-input" type="text" maxlength="24" placeholder="例：今日もがんばる！" />
-
         <div class="register-note">
-          <p>初期アイコン：🐰</p>
-          <p>初期背景：パステル</p>
-          <p>100問すべて入力して終了すると、プレイ回数が1回増えます。</p>
-          <p>遊ぶ回数が増えると、アイコンや背景カラーが増えます。</p>
+          <p>初期アイコン：🐰</p><p>初期背景：パステル</p><p>100問すべて入力して終了すると、プレイ回数が1回増えます。</p><p>遊ぶ回数が増えると、アイコンや背景カラーが増えます。</p>
         </div>
-
         <button id="registerBtn" class="pink-btn full-btn" type="button">はじめる</button>
         <p id="registerMessage" class="message-text"></p>
       </div>
@@ -50,26 +27,14 @@
 
     <section id="homeScreen" class="screen">
       <header class="app-header">
-        <div class="profile-box">
-          <div id="homeAvatar" class="avatar">🐰</div>
-          <div>
-            <div class="player-line">
-              <span id="homePlayerName" class="player-name">プレイヤー</span>
-              <span id="homeGrade" class="grade-badge">小6</span>
-            </div>
-            <div id="homeStatusMessage" class="player-level">今日もがんばる！</div>
-          </div>
-        </div>
-
+        <div class="profile-box"><div id="homeAvatar" class="avatar">🐰</div><span id="homeGrade" class="grade-badge">小6</span></div>
         <button id="menuBtn" class="menu-btn" type="button" aria-label="メニューを開く">☰</button>
       </header>
-
       <main class="home-main">
         <div class="card home-card">
           <h1>🎀 100マス計算 🎀</h1>
           <p class="subtitle">演算を選ぶと、難易度を選べます。</p>
-
-          <section id="operationSelectSection" class="select-section">
+          <section class="select-section">
             <h2 class="section-title">演算を選ぶ</h2>
             <div class="mode-buttons">
               <button type="button" class="mode-btn" data-op="add">➕ たし算</button>
@@ -78,61 +43,10 @@
               <button type="button" class="mode-btn" data-op="div">➗ わり算</button>
             </div>
           </section>
-
           <div class="home-note">
-            <p>💡 ミス1問につき <strong>+5秒</strong> 加算されます</p>
-            <p>💡 100問すべて入力すると、プレイ回数が1回増えます</p>
-            <p>PCでは、数字キー入力と <strong>→キー</strong> で次のマスへ移動できます。</p>
-          </div>
-
-          <div class="weekly-ranking-card compact-ranking-card">
-            <div class="ranking-head">
-              <h2>🏆 今週のランキング</h2>
-              <button id="reloadRankingBtn" class="mini-btn" type="button">更新</button>
-            </div>
-
-            <p class="ranking-subtitle">表示したいランキングを選んでください。</p>
-
-            <div class="ranking-select-area">
-              <label class="ranking-select-label">
-                演算
-                <select id="rankingOperationSelect" class="ranking-select">
-                  <option value="add">たし算</option>
-                  <option value="sub">ひき算</option>
-                  <option value="mul">かけ算</option>
-                  <option value="div">わり算</option>
-                </select>
-              </label>
-
-              <label class="ranking-select-label">
-                難易度
-                <select id="rankingDifficultySelect" class="ranking-select">
-                  <option value="easy">やさしい</option>
-                  <option value="normal">ふつう</option>
-                  <option value="hard">むずかしい</option>
-                </select>
-              </label>
-
-              <label class="ranking-select-label">
-                学年
-                <select id="rankingGradeSelect" class="ranking-select">
-                  <option value="all">全学年</option>
-                  <option value="小3">小3</option>
-                  <option value="小4">小4</option>
-                  <option value="小5">小5</option>
-                  <option value="小6">小6</option>
-                  <option value="中1">中1</option>
-                  <option value="中2">中2</option>
-                  <option value="中3">中3</option>
-                </select>
-              </label>
-            </div>
-
-            <button id="applyRankingFilterBtn" class="purple-btn ranking-apply-btn" type="button">
-              ランキングを表示
-            </button>
-
-            <ol id="weeklyRankingList" class="weekly-ranking-list compact-ranking-list"></ol>
+            <p>💡 ミス1問につき <strong>+5秒</strong> 加算されます。</p>
+            <p>💡 100問すべて入力すると、プレイ回数が1回増えます。</p>
+            <p>💡 PCでは数字キー・Enterキー・→キーが使えます。</p>
           </div>
         </div>
       </main>
@@ -140,47 +54,20 @@
 
     <section id="gameScreen" class="screen">
       <header class="game-header">
-        <div class="game-info">
-          <span id="operationLabel" class="badge">たし算</span>
-          <span id="difficultyLabel" class="badge difficulty-badge">やさしい</span>
-          <span id="timer" class="timer">00:00</span>
-        </div>
-
+        <div class="game-info"><span id="operationLabel" class="badge">たし算</span><span id="difficultyLabel" class="badge difficulty-badge">やさしい</span><span id="timer" class="timer">00:00</span></div>
         <button id="finishBtn" class="finish-btn" type="button">終了</button>
       </header>
-
-      <div id="countdownOverlay" class="countdown-overlay hidden">
-        <div id="countdownText" class="countdown-text">3</div>
-      </div>
-
-      <div class="board-wrapper">
-        <table id="gameBoard" class="game-board"></table>
-      </div>
-
+      <div id="countdownOverlay" class="countdown-overlay hidden"><div id="countdownText" class="countdown-text">3</div></div>
+      <div class="board-wrapper"><table id="gameBoard" class="game-board"></table></div>
       <div class="keypad-card">
         <h3>数字キーボード</h3>
         <div id="keypad" class="keypad">
-  <button type="button" class="key" data-value="7">7</button>
-  <button type="button" class="key" data-value="8">8</button>
-  <button type="button" class="key" data-value="9">9</button>
-  <button type="button" class="key utility" data-action="backspace">⌫</button>
-
-  <button type="button" class="key" data-value="4">4</button>
-  <button type="button" class="key" data-value="5">5</button>
-  <button type="button" class="key" data-value="6">6</button>
-  <button type="button" class="key utility" data-action="clear">C</button>
-
-  <button type="button" class="key" data-value="1">1</button>
-  <button type="button" class="key" data-value="2">2</button>
-  <button type="button" class="key" data-value="3">3</button>
-  <button type="button" class="key enter-key" data-action="enter">Enter</button>
-
-  <button type="button" class="key zero-key" data-value="0">0</button>
-</div>
-
-        <p class="keypad-note">
-          先にマスをタップしてから入力してください。PCでは数字キーと→キーが使えます。
-        </p>
+          <button type="button" class="key" data-value="7">7</button><button type="button" class="key" data-value="8">8</button><button type="button" class="key" data-value="9">9</button><button type="button" class="key utility" data-action="backspace">⌫</button>
+          <button type="button" class="key" data-value="4">4</button><button type="button" class="key" data-value="5">5</button><button type="button" class="key" data-value="6">6</button><button type="button" class="key utility" data-action="clear">C</button>
+          <button type="button" class="key" data-value="1">1</button><button type="button" class="key" data-value="2">2</button><button type="button" class="key" data-value="3">3</button><button type="button" class="key enter-key" data-action="enter">Enter</button>
+          <button type="button" class="key zero-key" data-value="0">0</button>
+        </div>
+        <p class="keypad-note">先にマスをタップしてから入力してください。Enterで次のマスへ移動できます。</p>
       </div>
     </section>
 
@@ -188,291 +75,64 @@
       <div class="result-stage">
         <div class="result-main-card">
           <h2>🌟 RESULT 🌟</h2>
-
-          <div class="result-mode-line">
-            <span id="resultOperationLabel" class="result-mode-badge">たし算</span>
-            <span id="resultDifficultyLabel" class="result-mode-badge">やさしい</span>
-          </div>
-
-          <div class="final-time-box">
-            <span class="final-time-label">最終タイム</span>
-            <span id="finalTime" class="final-time-value">00:00</span>
-            <span id="bestBadge" class="best-badge hidden">✨ 自己ベスト！ ✨</span>
-          </div>
-
+          <div class="result-mode-line"><span id="resultOperationLabel" class="result-mode-badge">たし算</span><span id="resultDifficultyLabel" class="result-mode-badge">やさしい</span></div>
+          <div class="final-time-box"><span class="final-time-label">最終タイム</span><span id="finalTime" class="final-time-value">00:00</span><span id="bestBadge" class="best-badge hidden">✨ 自己ベスト！ ✨</span></div>
           <div class="result-detail-box">
-            <div class="result-detail-item">
-              <span>正解数</span>
-              <strong id="correctCount">0 / 100</strong>
-            </div>
-            <div class="result-detail-item">
-              <span>ミス数</span>
-              <strong id="mistakeCount">0問</strong>
-            </div>
-            <div class="result-detail-item">
-              <span>計測タイム</span>
-              <strong id="rawTime">00:00</strong>
-            </div>
-            <div class="result-detail-item">
-              <span>加算タイム</span>
-              <strong id="penaltyTime">+0秒</strong>
-            </div>
+            <div class="result-detail-item"><span>正解数</span><strong id="correctCount">0 / 100</strong></div>
+            <div class="result-detail-item"><span>ミス数</span><strong id="mistakeCount">0問</strong></div>
+            <div class="result-detail-item"><span>計測タイム</span><strong id="rawTime">00:00</strong></div>
+            <div class="result-detail-item"><span>加算タイム</span><strong id="penaltyTime">+0秒</strong></div>
           </div>
-
-          <div id="unlockArea" class="unlock-area hidden">
-            <h3>🎁 新しく解放されました！</h3>
-            <div id="unlockList" class="unlock-list"></div>
-          </div>
-
+          <div id="unlockArea" class="unlock-area hidden"><h3>🎁 新しく解放されました！</h3><div id="unlockList" class="unlock-list"></div></div>
           <p id="saveMessage" class="message-text"></p>
-
-          <div class="result-buttons">
-            <button id="showReviewBtn" class="pink-btn" type="button">自分の解答を確認</button>
-            <button id="retryBtn" class="yellow-btn" type="button">もう一度</button>
-            <button id="backHomeBtn" class="purple-btn" type="button">ホームへ</button>
-          </div>
+          <div class="result-buttons"><button id="showReviewBtn" class="pink-btn" type="button">自分の解答を確認</button><button id="retryBtn" class="yellow-btn" type="button">もう一度</button><button id="backHomeBtn" class="purple-btn" type="button">ホームへ</button></div>
         </div>
-
-        <div id="reviewArea" class="review-area hidden">
-          <div class="card review-card">
-            <h3>📝 解答確認</h3>
-            <p class="review-note">まちがっているマスは赤色で表示されます</p>
-
-            <div class="board-wrapper">
-              <table id="reviewBoard" class="game-board review-board"></table>
-            </div>
-          </div>
-        </div>
+        <div id="reviewArea" class="review-area hidden"><div class="card review-card"><h3>📝 解答確認</h3><p class="review-note">まちがっているマスは赤色で表示されます。</p><div class="board-wrapper"><table id="reviewBoard" class="game-board review-board"></table></div></div></div>
       </div>
     </section>
 
     <section id="historyScreen" class="screen">
-      <header class="simple-header">
-        <button id="historyBackBtn" class="small-back-btn" type="button">← ホームへ</button>
-        <h2>📚 過去の記録</h2>
-      </header>
-
-      <div class="history-layout">
-        <div class="card history-card">
-          <div class="history-head">
-            <h3>自分のプレイ履歴</h3>
-            <button id="reloadHistoryBtn" class="mini-btn" type="button">更新</button>
-          </div>
-
-          <div id="historyList" class="history-list"></div>
-        </div>
-
-        <div id="historyDetailArea" class="card history-detail-card hidden">
-          <h3>記録の詳細</h3>
-          <div id="historyDetailText" class="history-detail-text"></div>
-
-          <div class="board-wrapper">
-            <table id="historyReviewBoard" class="game-board review-board"></table>
-          </div>
-        </div>
-      </div>
+      <header class="simple-header"><button id="historyBackBtn" class="small-back-btn" type="button">← ホームへ</button><h2>📚 過去の記録</h2></header>
+      <div class="history-layout"><div class="card history-card"><div class="history-head"><h3>プレイ履歴</h3><button id="reloadHistoryBtn" class="mini-btn" type="button">更新</button></div><div id="historyList" class="history-list"></div></div><div id="historyDetailArea" class="card history-detail-card hidden"><h3>記録の詳細</h3><div id="historyDetailText" class="history-detail-text"></div><div class="board-wrapper"><table id="historyReviewBoard" class="game-board review-board"></table></div></div></div>
     </section>
 
     <section id="bestScreen" class="screen">
-      <header class="simple-header">
-        <button id="bestBackBtn" class="small-back-btn" type="button">← ホームへ</button>
-        <h2>✨ 自己ベスト</h2>
-      </header>
-
-      <div class="card best-card">
-        <div id="bestList" class="best-list"></div>
-      </div>
+      <header class="simple-header"><button id="bestBackBtn" class="small-back-btn" type="button">← ホームへ</button><h2>✨ 自己ベスト</h2></header>
+      <div class="card best-card"><div id="bestList" class="best-list"></div></div>
     </section>
 
     <section id="profileEditScreen" class="screen">
-      <header class="simple-header">
-        <button id="profileBackBtn" class="small-back-btn" type="button">← ホームへ</button>
-        <h2>👤 プロフィール変更</h2>
-      </header>
-
+      <header class="simple-header"><button id="profileBackBtn" class="small-back-btn" type="button">← ホームへ</button><h2>👤 プロフィール変更</h2></header>
       <div class="card profile-edit-card">
         <div class="profile-edit-main">
-          <button id="editAvatarButton" class="profile-avatar-button" type="button">
-            <span id="editAvatarPreview" class="profile-avatar-large">🐰</span>
-            <span class="avatar-edit-hint">タップしてアイコン変更</span>
-          </button>
-
-          <div class="profile-count-box">
-            <span>プレイ回数</span>
-            <strong id="profilePlayCount">0回</strong>
-          </div>
-
-          <div class="profile-edit-row">
-            <div class="profile-edit-text">
-              <div class="profile-name-line">
-                <span id="editProfileNameText" class="profile-edit-name">プレイヤー</span>
-                <span id="editProfileGradeText" class="profile-edit-grade">小6</span>
-              </div>
-            </div>
-            <button id="editNameGradeBtn" class="edit-pencil-btn" type="button" aria-label="名前と学年を編集">✏️</button>
-          </div>
-
-          <div class="profile-edit-row">
-            <div class="profile-edit-text">
-              <div id="editStatusText" class="profile-edit-status">今日もがんばる！</div>
-            </div>
-            <button id="editStatusBtn" class="edit-pencil-btn" type="button" aria-label="一言メッセージを編集">✏️</button>
-          </div>
+          <button id="editAvatarButton" class="profile-avatar-button" type="button"><span id="editAvatarPreview" class="profile-avatar-large">🐰</span><span class="avatar-edit-hint">タップしてアイコン変更</span></button>
+          <div class="profile-count-box"><span>プレイ回数</span><strong id="profilePlayCount">0回</strong></div>
+          <div class="profile-edit-row"><div class="profile-edit-text"><span id="editProfileGradeText" class="profile-edit-grade">小6</span></div><button id="editGradeBtn" class="edit-pencil-btn" type="button" aria-label="学年を編集">✏️</button></div>
         </div>
-
-        <div id="profileAvatarPanel" class="profile-avatar-panel hidden">
-          <p class="profile-panel-title">アイコンを選んでね</p>
-          <p class="profile-panel-note">10回プレイするごとに新しいアイコンが解放されます。</p>
-
-          <div id="editAvatarChoices" class="avatar-choices unlock-grid">
-            <button type="button" class="edit-avatar-choice" data-avatar="🐰" data-required-plays="0">🐰</button>
-            <button type="button" class="edit-avatar-choice locked" data-avatar="🐱" data-required-plays="10">🐱<span>10回</span></button>
-            <button type="button" class="edit-avatar-choice locked" data-avatar="🐶" data-required-plays="20">🐶<span>20回</span></button>
-            <button type="button" class="edit-avatar-choice locked" data-avatar="🐼" data-required-plays="30">🐼<span>30回</span></button>
-            <button type="button" class="edit-avatar-choice locked" data-avatar="🐻" data-required-plays="40">🐻<span>40回</span></button>
-            <button type="button" class="edit-avatar-choice locked" data-avatar="🦊" data-required-plays="50">🦊<span>50回</span></button>
-            <button type="button" class="edit-avatar-choice locked" data-avatar="🐹" data-required-plays="60">🐹<span>60回</span></button>
-            <button type="button" class="edit-avatar-choice locked" data-avatar="🐨" data-required-plays="70">🐨<span>70回</span></button>
-            <button type="button" class="edit-avatar-choice locked" data-avatar="🐧" data-required-plays="80">🐧<span>80回</span></button>
-            <button type="button" class="edit-avatar-choice locked" data-avatar="🐥" data-required-plays="90">🐥<span>90回</span></button>
-            <button type="button" class="edit-avatar-choice locked" data-avatar="🐢" data-required-plays="100">🐢<span>100回</span></button>
-            <button type="button" class="edit-avatar-choice locked" data-avatar="🦁" data-required-plays="110">🦁<span>110回</span></button>
-            <button type="button" class="edit-avatar-choice locked" data-avatar="🐯" data-required-plays="120">🐯<span>120回</span></button>
-            <button type="button" class="edit-avatar-choice locked" data-avatar="🐮" data-required-plays="130">🐮<span>130回</span></button>
-            <button type="button" class="edit-avatar-choice locked" data-avatar="🐷" data-required-plays="140">🐷<span>140回</span></button>
-            <button type="button" class="edit-avatar-choice locked" data-avatar="🐸" data-required-plays="150">🐸<span>150回</span></button>
-            <button type="button" class="edit-avatar-choice locked" data-avatar="🐵" data-required-plays="160">🐵<span>160回</span></button>
-            <button type="button" class="edit-avatar-choice locked" data-avatar="🦄" data-required-plays="170">🦄<span>170回</span></button>
-          </div>
-        </div>
-
-        <div id="nameGradeEditPanel" class="profile-edit-panel hidden">
-          <label class="input-label" for="editPlayerNameInput">プレイヤー名</label>
-          <input id="editPlayerNameInput" class="name-input" type="text" maxlength="12" placeholder="例：ゆい" />
-
-          <label class="input-label" for="editGradeSelect">学年</label>
-          <select id="editGradeSelect" class="grade-select">
-            <option value="小3">小3</option>
-            <option value="小4">小4</option>
-            <option value="小5">小5</option>
-            <option value="小6">小6</option>
-            <option value="中1">中1</option>
-            <option value="中2">中2</option>
-            <option value="中3">中3</option>
-          </select>
-
-          <button id="applyNameGradeBtn" class="pink-btn full-btn" type="button">名前・学年を反映</button>
-        </div>
-
-        <div id="statusEditPanel" class="profile-edit-panel hidden">
-          <label class="input-label" for="editStatusMessageInput">一言メッセージ</label>
-          <input id="editStatusMessageInput" class="name-input" type="text" maxlength="24" placeholder="例：今日もがんばる！" />
-          <button id="applyStatusBtn" class="pink-btn full-btn" type="button">一言を反映</button>
-        </div>
-
-        <div class="profile-edit-panel theme-select-panel">
-          <p class="profile-panel-title">背景カラー</p>
-          <p class="profile-panel-note">5回プレイするごとに新しい背景カラーが解放されます。</p>
-
-          <div id="themeChoices" class="theme-choices">
-            <button type="button" class="theme-choice active" data-theme="pastel" data-required-plays="0"><span class="theme-sample theme-sample-pastel"></span><span>パステル</span></button>
-            <button type="button" class="theme-choice locked" data-theme="sakura" data-required-plays="5"><span class="theme-sample theme-sample-sakura"></span><span>さくら</span><small>5回</small></button>
-            <button type="button" class="theme-choice locked" data-theme="sky" data-required-plays="10"><span class="theme-sample theme-sample-sky"></span><span>そら</span><small>10回</small></button>
-            <button type="button" class="theme-choice locked" data-theme="mint" data-required-plays="15"><span class="theme-sample theme-sample-mint"></span><span>ミント</span><small>15回</small></button>
-            <button type="button" class="theme-choice locked" data-theme="lemon" data-required-plays="20"><span class="theme-sample theme-sample-lemon"></span><span>レモン</span><small>20回</small></button>
-            <button type="button" class="theme-choice locked" data-theme="lavender" data-required-plays="25"><span class="theme-sample theme-sample-lavender"></span><span>ラベンダー</span><small>25回</small></button>
-            <button type="button" class="theme-choice locked" data-theme="peach" data-required-plays="30"><span class="theme-sample theme-sample-peach"></span><span>ピーチ</span><small>30回</small></button>
-            <button type="button" class="theme-choice locked" data-theme="soda" data-required-plays="35"><span class="theme-sample theme-sample-soda"></span><span>クリームソーダ</span><small>35回</small></button>
-            <button type="button" class="theme-choice locked" data-theme="night" data-required-plays="40"><span class="theme-sample theme-sample-night"></span><span>夜空</span><small>40回</small></button>
-            <button type="button" class="theme-choice locked" data-theme="chocomint" data-required-plays="45"><span class="theme-sample theme-sample-chocomint"></span><span>チョコミント</span><small>45回</small></button>
-            <button type="button" class="theme-choice locked" data-theme="candy" data-required-plays="50"><span class="theme-sample theme-sample-candy"></span><span>キャンディ</span><small>50回</small></button>
-            <button type="button" class="theme-choice locked" data-theme="orange" data-required-plays="55"><span class="theme-sample theme-sample-orange"></span><span>オレンジ</span><small>55回</small></button>
-            <button type="button" class="theme-choice locked" data-theme="bluegray" data-required-plays="60"><span class="theme-sample theme-sample-bluegray"></span><span>ブルーグレー</span><small>60回</small></button>
-            <button type="button" class="theme-choice locked" data-theme="green" data-required-plays="65"><span class="theme-sample theme-sample-green"></span><span>グリーン</span><small>65回</small></button>
-            <button type="button" class="theme-choice locked" data-theme="pinkpurple" data-required-plays="70"><span class="theme-sample theme-sample-pinkpurple"></span><span>ピンクパープル</span><small>70回</small></button>
-          </div>
-        </div>
-
-        <p id="profileEditMessage" class="message-text"></p>
-        <button id="saveProfileBtn" class="purple-btn full-btn" type="button">保存して戻る</button>
+        <div id="profileAvatarPanel" class="profile-avatar-panel hidden"><p class="profile-panel-title">アイコンを選んでね</p><p class="profile-panel-note">10回プレイするごとに新しいアイコンが解放されます。</p><div id="editAvatarChoices" class="avatar-choices unlock-grid">
+          <button type="button" class="edit-avatar-choice" data-avatar="🐰" data-required-plays="0">🐰</button><button type="button" class="edit-avatar-choice locked" data-avatar="🐱" data-required-plays="10">🐱<span>10回</span></button><button type="button" class="edit-avatar-choice locked" data-avatar="🐶" data-required-plays="20">🐶<span>20回</span></button><button type="button" class="edit-avatar-choice locked" data-avatar="🐼" data-required-plays="30">🐼<span>30回</span></button><button type="button" class="edit-avatar-choice locked" data-avatar="🐻" data-required-plays="40">🐻<span>40回</span></button><button type="button" class="edit-avatar-choice locked" data-avatar="🦊" data-required-plays="50">🦊<span>50回</span></button><button type="button" class="edit-avatar-choice locked" data-avatar="🐹" data-required-plays="60">🐹<span>60回</span></button><button type="button" class="edit-avatar-choice locked" data-avatar="🐨" data-required-plays="70">🐨<span>70回</span></button><button type="button" class="edit-avatar-choice locked" data-avatar="🐧" data-required-plays="80">🐧<span>80回</span></button><button type="button" class="edit-avatar-choice locked" data-avatar="🐥" data-required-plays="90">🐥<span>90回</span></button><button type="button" class="edit-avatar-choice locked" data-avatar="🐢" data-required-plays="100">🐢<span>100回</span></button><button type="button" class="edit-avatar-choice locked" data-avatar="🦁" data-required-plays="110">🦁<span>110回</span></button><button type="button" class="edit-avatar-choice locked" data-avatar="🐯" data-required-plays="120">🐯<span>120回</span></button><button type="button" class="edit-avatar-choice locked" data-avatar="🐮" data-required-plays="130">🐮<span>130回</span></button><button type="button" class="edit-avatar-choice locked" data-avatar="🐷" data-required-plays="140">🐷<span>140回</span></button><button type="button" class="edit-avatar-choice locked" data-avatar="🐸" data-required-plays="150">🐸<span>150回</span></button><button type="button" class="edit-avatar-choice locked" data-avatar="🐵" data-required-plays="160">🐵<span>160回</span></button><button type="button" class="edit-avatar-choice locked" data-avatar="🦄" data-required-plays="170">🦄<span>170回</span></button>
+        </div></div>
+        <div id="gradeEditPanel" class="profile-edit-panel hidden"><label class="input-label" for="editGradeSelect">学年</label><select id="editGradeSelect" class="grade-select"><option value="小3">小3</option><option value="小4">小4</option><option value="小5">小5</option><option value="小6">小6</option><option value="中1">中1</option><option value="中2">中2</option><option value="中3">中3</option></select><button id="applyGradeBtn" class="pink-btn full-btn" type="button">学年を反映</button></div>
+        <div class="profile-edit-panel theme-select-panel"><p class="profile-panel-title">背景カラー</p><p class="profile-panel-note">5回プレイするごとに新しい背景カラーが解放されます。</p><div id="themeChoices" class="theme-choices">
+          <button type="button" class="theme-choice active" data-theme="pastel" data-required-plays="0"><span class="theme-sample theme-sample-pastel"></span><span>パステル</span></button><button type="button" class="theme-choice locked" data-theme="sakura" data-required-plays="5"><span class="theme-sample theme-sample-sakura"></span><span>さくら</span><small>5回</small></button><button type="button" class="theme-choice locked" data-theme="sky" data-required-plays="10"><span class="theme-sample theme-sample-sky"></span><span>そら</span><small>10回</small></button><button type="button" class="theme-choice locked" data-theme="mint" data-required-plays="15"><span class="theme-sample theme-sample-mint"></span><span>ミント</span><small>15回</small></button><button type="button" class="theme-choice locked" data-theme="lemon" data-required-plays="20"><span class="theme-sample theme-sample-lemon"></span><span>レモン</span><small>20回</small></button><button type="button" class="theme-choice locked" data-theme="lavender" data-required-plays="25"><span class="theme-sample theme-sample-lavender"></span><span>ラベンダー</span><small>25回</small></button><button type="button" class="theme-choice locked" data-theme="peach" data-required-plays="30"><span class="theme-sample theme-sample-peach"></span><span>ピーチ</span><small>30回</small></button><button type="button" class="theme-choice locked" data-theme="soda" data-required-plays="35"><span class="theme-sample theme-sample-soda"></span><span>クリームソーダ</span><small>35回</small></button><button type="button" class="theme-choice locked" data-theme="night" data-required-plays="40"><span class="theme-sample theme-sample-night"></span><span>夜空</span><small>40回</small></button><button type="button" class="theme-choice locked" data-theme="chocomint" data-required-plays="45"><span class="theme-sample theme-sample-chocomint"></span><span>チョコミント</span><small>45回</small></button><button type="button" class="theme-choice locked" data-theme="candy" data-required-plays="50"><span class="theme-sample theme-sample-candy"></span><span>キャンディ</span><small>50回</small></button><button type="button" class="theme-choice locked" data-theme="orange" data-required-plays="55"><span class="theme-sample theme-sample-orange"></span><span>オレンジ</span><small>55回</small></button><button type="button" class="theme-choice locked" data-theme="bluegray" data-required-plays="60"><span class="theme-sample theme-sample-bluegray"></span><span>ブルーグレー</span><small>60回</small></button><button type="button" class="theme-choice locked" data-theme="green" data-required-plays="65"><span class="theme-sample theme-sample-green"></span><span>グリーン</span><small>65回</small></button><button type="button" class="theme-choice locked" data-theme="pinkpurple" data-required-plays="70"><span class="theme-sample theme-sample-pinkpurple"></span><span>ピンクパープル</span><small>70回</small></button>
+        </div></div>
+        <p id="profileEditMessage" class="message-text"></p><button id="saveProfileBtn" class="purple-btn full-btn" type="button">保存して戻る</button>
       </div>
     </section>
 
     <section id="tutorialScreen" class="screen">
-      <header class="simple-header">
-        <button id="tutorialBackBtn" class="small-back-btn" type="button">← 戻る</button>
-        <h2>📖 使い方</h2>
-      </header>
-
-      <div class="card tutorial-card">
-        <h1>100マス計算の進め方</h1>
-
-        <div class="tutorial-steps">
-          <div class="tutorial-step"><span class="tutorial-number">1</span><div><h3>演算を選びます</h3><p>たし算・ひき算・かけ算・わり算から選びます。</p></div></div>
-          <div class="tutorial-step"><span class="tutorial-number">2</span><div><h3>難易度を選びます</h3><p>演算を選ぶと、難易度選択画面が出ます。</p></div></div>
-          <div class="tutorial-step"><span class="tutorial-number">3</span><div><h3>3カウント後にスタート</h3><p>3、2、1、Go! のあとにタイマーが動き始めます。</p></div></div>
-          <div class="tutorial-step"><span class="tutorial-number">4</span><div><h3>答えたいマスをタップ</h3><p>答えを入れたいマスを選び、数字を入力します。</p></div></div>
-          <div class="tutorial-step"><span class="tutorial-number">5</span><div><h3>数字を入力します</h3><p>画面の数字キーボード、またはPCの数字キーで入力できます。</p></div></div>
-          <div class="tutorial-step"><span class="tutorial-number">6</span><div><h3>PCでは→キーが使えます</h3><p>→キーを押すと、次のマスへ移動できます。</p></div></div>
-          <div class="tutorial-step"><span class="tutorial-number">7</span><div><h3>終わったら終了ボタン</h3><p>終了を押すと、正解数・ミス数・タイムが表示されます。</p></div></div>
-          <div class="tutorial-step"><span class="tutorial-number">8</span><div><h3>ミスは+5秒</h3><p>まちがい1問につき、最終タイムに5秒加算されます。</p></div></div>
-          <div class="tutorial-step"><span class="tutorial-number">9</span><div><h3>100問入力でプレイ回数アップ</h3><p>100問すべて入力して終了すると、プレイ回数が1回増えます。</p></div></div>
-          <div class="tutorial-step"><span class="tutorial-number">10</span><div><h3>ランキングに挑戦</h3><p>ランキングは、週ごと・演算ごと・難易度ごと・学年ごとに分かれます。</p></div></div>
-          <div class="tutorial-step"><span class="tutorial-number">11</span><div><h3>アイコンと背景を集めよう</h3><p>10回ごとに新アイコン、5回ごとに新背景カラーが解放されます。</p></div></div>
-        </div>
-
-        <button id="finishTutorialBtn" class="pink-btn full-btn" type="button">使い方を確認しました</button>
-      </div>
+      <header class="simple-header"><button id="tutorialBackBtn" class="small-back-btn" type="button">← 戻る</button><h2>📖 使い方</h2></header>
+      <div class="card tutorial-card"><h1>100マス計算の進め方</h1><div class="tutorial-steps">
+        <div class="tutorial-step"><span class="tutorial-number">1</span><div><h3>演算を選びます</h3><p>たし算・ひき算・かけ算・わり算から選びます。</p></div></div><div class="tutorial-step"><span class="tutorial-number">2</span><div><h3>難易度を選びます</h3><p>演算を選ぶと、難易度選択画面が出ます。</p></div></div><div class="tutorial-step"><span class="tutorial-number">3</span><div><h3>3カウント後にスタート</h3><p>3、2、1、Go! のあとにタイマーが動き始めます。</p></div></div><div class="tutorial-step"><span class="tutorial-number">4</span><div><h3>答えたいマスをタップ</h3><p>答えを入れたいマスを選び、数字を入力します。</p></div></div><div class="tutorial-step"><span class="tutorial-number">5</span><div><h3>数字を入力します</h3><p>画面の数字キーボード、またはPCの数字キーで入力できます。</p></div></div><div class="tutorial-step"><span class="tutorial-number">6</span><div><h3>Enter・→キーが使えます</h3><p>Enterキーまたは→キーを押すと、次のマスへ移動できます。</p></div></div><div class="tutorial-step"><span class="tutorial-number">7</span><div><h3>終わったら終了ボタン</h3><p>終了を押すと、正解数・ミス数・タイムが表示されます。</p></div></div><div class="tutorial-step"><span class="tutorial-number">8</span><div><h3>ミスは+5秒</h3><p>まちがい1問につき、最終タイムに5秒加算されます。</p></div></div><div class="tutorial-step"><span class="tutorial-number">9</span><div><h3>100問入力でプレイ回数アップ</h3><p>100問すべて入力して終了すると、プレイ回数が1回増えます。</p></div></div><div class="tutorial-step"><span class="tutorial-number">10</span><div><h3>アイコンと背景を集めよう</h3><p>10回ごとに新アイコン、5回ごとに新背景カラーが解放されます。</p></div></div>
+      </div><button id="finishTutorialBtn" class="pink-btn full-btn" type="button">使い方を確認しました</button></div>
     </section>
 
-    <div id="difficultyModal" class="difficulty-modal hidden">
-      <div id="difficultyModalBg" class="difficulty-modal-bg"></div>
-      <div class="difficulty-modal-card">
-        <button id="closeDifficultyModalBtn" class="close-modal-btn" type="button">×</button>
-        <h2 id="difficultyModalTitle">難易度を選ぶ</h2>
-        <p id="difficultyModalSubtitle" class="difficulty-modal-subtitle">難易度を選ぶとゲームが始まります</p>
-        <div class="difficulty-modal-buttons">
-          <button type="button" class="modal-difficulty-btn" data-difficulty="easy">やさしい</button>
-          <button type="button" class="modal-difficulty-btn" data-difficulty="normal">ふつう</button>
-          <button type="button" class="modal-difficulty-btn" data-difficulty="hard">むずかしい</button>
-        </div>
-      </div>
-    </div>
+    <div id="difficultyModal" class="difficulty-modal hidden"><div id="difficultyModalBg" class="difficulty-modal-bg"></div><div class="difficulty-modal-card"><button id="closeDifficultyModalBtn" class="close-modal-btn" type="button">×</button><h2 id="difficultyModalTitle">難易度を選ぶ</h2><p class="difficulty-modal-subtitle">難易度を選ぶとゲームが始まります。</p><div class="difficulty-modal-buttons"><button type="button" class="modal-difficulty-btn" data-difficulty="easy">やさしい</button><button type="button" class="modal-difficulty-btn" data-difficulty="normal">ふつう</button><button type="button" class="modal-difficulty-btn" data-difficulty="hard">むずかしい</button></div></div></div>
 
-    <div id="sideMenu" class="side-menu hidden">
-      <div id="sideMenuBg" class="side-menu-bg"></div>
-      <div class="side-menu-card">
-        <button id="closeMenuBtn" class="close-menu-btn" type="button">×</button>
+    <div id="sideMenu" class="side-menu hidden"><div id="sideMenuBg" class="side-menu-bg"></div><div class="side-menu-card"><button id="closeMenuBtn" class="close-menu-btn" type="button">×</button><div class="menu-profile"><div id="menuAvatar" class="avatar large">🐰</div><span id="menuGrade" class="grade-badge">小6</span></div><h2>メニュー</h2><button id="showHistoryBtn" class="menu-item" type="button">📚 過去の記録</button><button id="showBestBtn" class="menu-item" type="button">✨ 自己ベスト</button><button id="changeProfileBtn" class="menu-item" type="button">👤 プロフィール変更</button><button id="showTutorialBtn" class="menu-item" type="button">📖 使い方を見る</button><button id="showHomeBtn" class="menu-item" type="button">🏠 ホーム</button><button id="logoutBtn" class="menu-item logout-item" type="button">🚪 データ削除してログアウト</button></div></div>
 
-        <div class="menu-profile">
-          <div id="menuAvatar" class="avatar large">🐰</div>
-          <div>
-            <div class="player-line">
-              <span id="menuPlayerName" class="player-name">プレイヤー</span>
-              <span id="menuGrade" class="grade-badge">小6</span>
-            </div>
-            <div id="menuStatusMessage" class="player-level">今日もがんばる！</div>
-          </div>
-        </div>
-
-        <h2>メニュー</h2>
-        <button id="showHistoryBtn" class="menu-item" type="button">📚 過去の記録</button>
-        <button id="showBestBtn" class="menu-item" type="button">✨ 自己ベスト</button>
-        <button id="changeProfileBtn" class="menu-item" type="button">👤 プロフィール変更</button>
-        <button id="showTutorialBtn" class="menu-item" type="button">📖 使い方を見る</button>
-        <button id="showHomeBtn" class="menu-item" type="button">🏠 ホーム</button>
-        <button id="logoutBtn" class="menu-item logout-item" type="button">🚪 データ削除してログアウト</button>
-      </div>
-    </div>
-
-    <section id="loadingScreen" class="screen active">
-      <div class="card loading-card">
-        <h1>🎀 100マス計算 🎀</h1>
-        <p>読み込み中...</p>
-      </div>
-    </section>
+    <section id="loadingScreen" class="screen active"><div class="card loading-card"><h1>🎀 100マス計算 🎀</h1><p>読み込み中...</p></div></section>
   </div>
-
   <script type="module" src="script.js"></script>
 </body>
 </html>
