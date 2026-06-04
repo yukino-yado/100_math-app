@@ -23,15 +23,14 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
 /* Firebase Consoleからコピーした設定に置き換えてください。 */
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyA1DwKuag7tuKC75aGWYq4AszDSJHONdy0",
-  authDomain: "math-app-89b47.firebaseapp.com",
-  projectId: "math-app-89b47",
-  storageBucket: "math-app-89b47.firebasestorage.app",
-  messagingSenderId: "908293875104",
-  appId: "1:908293875104:web:f4779d37faeae2e31830c5",
-  measurementId: "G-FEG9WC237V"
+  apiKey: "ここに入れる",
+  authDomain: "ここに入れる",
+  projectId: "ここに入れる",
+  storageBucket: "ここに入れる",
+  messagingSenderId: "ここに入れる",
+  appId: "ここに入れる",
+  measurementId: "ここに入れる"
 };
 
 const app = initializeApp(firebaseConfig);
